@@ -1,5 +1,5 @@
 
-INCLUDE := -I./include/ -I./lib/
+INCLUDE := -I./include/ -I./lib/ -I./lib/glm/
 CFLAGS := -lglfw -lm -Werror -Wall -pedantic
 CC := g++
 

@@ -8,6 +8,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include "./molson.h"
+
 namespace Core {
     
     class Application {
@@ -17,8 +19,11 @@ namespace Core {
 	    
 	    bool running = false;
 	    GLFWwindow *window;
+	    Shader main_shader;
 	    
 	public:
+	    
+	    Shader *getMainShader();
 	    GLFWwindow *getWindow();
 	    bool isRunning();
 	    
