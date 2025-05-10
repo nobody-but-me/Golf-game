@@ -17,49 +17,47 @@ namespace Game {
 	return;
     }
     
-    Objects::Rectangle *rect;
-    Objects::Sprite *sprite;
+    Objects::Rectangle *player;
+    Objects::Rectangle *ground;
     void ready() {
-	sprite = new Objects::Sprite("Sprite1", "./assets/m.png", true);
-	rect = new Objects::Rectangle("Rectangle1");
-	sprite->self.color = glm::vec3(1.0f, 1.0f, 1.0f);
-	sprite->self.position = glm::vec3(0.0f, 0.0f, 0.0f);
-	sprite->self.scale = glm::vec2(2.0f, 2.0f);
-	sprite->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	player = new Objects::Rectangle("Player");
+	ground = new Objects::Rectangle("Ground");
 	
-	rect->self.color = glm::vec3(1.0f, 0.0f, 0.0f);
-	rect->self.position = glm::vec3(-1.0f, -1.0f, 0.0f);
-	rect->self.scale = glm::vec2(1.0f, 1.0f);
+	player->self.position = glm::vec3(-2.0f, -2.0f, 0.0f);
+	player->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	player->self.color = glm::vec3(240.0f, 58.0f, 46.0f);
+	player->self.scale = glm::vec2(1.0f, 2.0f) * 3.0f;
 	
-	std::cout << "Hello Golf Game." << std::endl;
+	ground->self.position = glm::vec3(0.0f - *engine->getWindowHeight() / 2, -10.0f, 0.0f);
+	ground->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	ground->self.color = glm::vec3(42.0f, 93.0f, 232.0f);
+	ground->self.scale = glm::vec2(*engine->getWindowHeight(), 3.0f);
 	return;
     }
     
     void process(float delta) {
-	sprite->render(engine->getMainShader());
-	rect->render(engine->getMainShader());
-	sprite->self.rotation[0] = delta * 50.0f;
-	sprite->self.rotation[2] = delta * 50.0f;
+	player->render(engine->getMainShader());
+	ground->render(engine->getMainShader());
 	
 	if (engine->isKeyPressed(GOLF_D)) {
-	    sprite->self.position[0] += 0.05f;
+	    player->self.position[0] += 0.5f;
 	}
 	else if (engine->isKeyPressed(GOLF_A)) {
-	    sprite->self.position[0] -= 0.05f;
+	    player->self.position[0] -= 0.5f;
 	}
 	if (engine->isKeyPressed(GOLF_W)) {
-	    sprite->self.position[1] += 0.05f;
+	    player->self.position[1] += 0.5f;
 	}
 	else if (engine->isKeyPressed(GOLF_S)) {
-	    sprite->self.position[1] -= 0.05f;
+	    player->self.position[1] -= 0.5f;
 	}
-	sprite->isCollidingRect(rect, true);
+	player->isCollidingRect(ground, true);
 	
 	return;
     }
     
     void destroy() {
-	delete sprite;
-	delete rect;
+	delete player;
+	delete ground;
     }
 }

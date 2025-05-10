@@ -142,6 +142,7 @@ Texture Molson(_load_texture)(const char *_file_path, bool _alpha) {
     int _channels;
     int _height, _width;
     
+    stbi_set_flip_vertically_on_load(true);
     unsigned char *_data = stbi_load(_file_path, &_width, &_height, &_channels, 0);
     generate_texture(_width, _height, _data, &_new_texture);
     stbi_image_free(_data);

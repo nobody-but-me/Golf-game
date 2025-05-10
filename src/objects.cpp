@@ -113,7 +113,7 @@ namespace Objects {
 	transform = glm::scale(transform, glm::vec3(self.scale, 1.0f));
 	
 	Molson(_set_matrix4)("transform", &transform, false, p_shader);
-	Molson(_set_vector3_f)("color", self.color, false, p_shader);
+	Molson(_set_vector3_f)("color", self.color / 255.0f, false, p_shader);
 	Molson(_set_bool)("is_textured", true, p_shader);
 	
 	if (texture_path != "") {
@@ -190,7 +190,7 @@ namespace Objects {
 	transform = glm::scale(transform, glm::vec3(self.scale, 1.0f));
 	
 	Molson(_set_matrix4)("transform", &transform, false, p_shader);
-	Molson(_set_vector3_f)("color", self.color, false, p_shader);
+	Molson(_set_vector3_f)("color", self.color / 255.0f, false, p_shader);
 	Molson(_set_bool)("is_textured", false, p_shader);
 	
 	glBindVertexArray(self.vao);
