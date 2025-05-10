@@ -23,7 +23,7 @@ namespace Objects {
 	std::cout << "[INFO]: Sprite had been destroyed successfully. " << std::endl;
 	return;
     }
-    Sprite::Sprite(std::string p_name, std::string p_texture_path) {
+    Sprite::Sprite(std::string p_name, std::string p_texture_path, bool alpha) {
 	float vertices[] = {
 	    0.0f, 1.0f, 0.0f, 1.0f,
 	    1.0f, 0.0f, 1.0f, 0.0f,
@@ -47,7 +47,12 @@ namespace Objects {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	
-	texture_path = p_texture_path;
+	if (p_texture_path != "") {
+	    texture_path = p_texture_path;
+	    texture = Molson(_load_texture)(texture_path.c_str(), alpha);
+	} else {
+	    texture_path = "";
+	}
 	
 	initialized = 1;
 	std::cout << "[INFO]: Sprite " << name << " had been created." << std::endl;
@@ -68,7 +73,12 @@ namespace Objects {
 	
 	Molson(_set_matrix4)("transform", &transform, false, p_shader);
 	Molson(_set_vector3_f)("color", self.color, false, p_shader);
-	Molson(_set_bool)("is_textured", false, p_shader);
+	Molson(_set_bool)("is_textured", true, p_shader);
+	
+	if (texture_path != "") {
+	    glActiveTexture(GL_TEXTURE0);
+	    glBindTexture(GL_TEXTURE_2D, texture.id);
+	}
 	
 	glBindVertexArray(self.vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

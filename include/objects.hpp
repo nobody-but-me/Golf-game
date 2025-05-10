@@ -35,7 +35,7 @@ namespace Objects {
 	    std::string name;
 	    Object self;
 	    
-	    Sprite(std::string p_name, std::string p_texture_path);
+	    Sprite(std::string p_name, std::string p_texture_path, bool alpha);
 	    ~Sprite();
 	    
 	    void render(Shader *p_shader);
