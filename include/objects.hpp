@@ -11,19 +11,20 @@
 
 namespace Objects {
     
-    typedef struct {
+    typedef struct Object {
 	unsigned int vbo;
 	unsigned int vao;
 	unsigned int ebo;
 	
 	glm::mat4 transform;
-	glm::vec2 position;
+	glm::vec3 position;
+	glm::vec3 rotation;
 	glm::vec2 scale;
-	float rotation;
 	
 	glm::vec3 color;
-    } Object; 
+    } Object;
     
+    class Rectangle;
     class Sprite {
 	private:
 	    std::string texture_path;
@@ -35,9 +36,10 @@ namespace Objects {
 	    std::string name;
 	    Object self;
 	    
-	    Sprite(std::string p_name, std::string p_texture_path, bool alpha);
+	    Sprite(std::string p_name, std::string p_texture_path, bool p_alpha);
 	    ~Sprite();
 	    
+	    bool isCollidingRect(Rectangle *p_rect, bool p_adjust_position = false);
 	    void render(Shader *p_shader);
 	    
     };
@@ -51,6 +53,7 @@ namespace Objects {
 	    Rectangle(std::string p_name);
 	    ~Rectangle();
 	    
+	    bool isCollidingRect(Rectangle *p_object, bool p_adjust_position = false);
 	    void render(Shader *p_shader);
     };
     

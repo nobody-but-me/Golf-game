@@ -72,7 +72,7 @@ const char *Molson(_file_to_string)(const char *_file_path) {
     
     _file = fopen(_file_path, "r");
     if (_file == NULL) {
-	printf("[FAILED] File could not be loaded. \n");
+	printf("[FAILED]: File could not be loaded. \n");
 	fclose(_file);
 	return NULL;
     }
@@ -80,23 +80,23 @@ const char *Molson(_file_to_string)(const char *_file_path) {
     _buffer_size = ftell(_file);
     _buffer = (char *)malloc(_buffer_size + 1);
     if (_buffer == NULL) {
-	printf("[INFO] Buffer could not be read. \n ");
+	printf("[INFO]: Buffer could not be read. \n ");
 	return NULL;
     }
     
     if (fseek(_file, 0, SEEK_SET) < 0) goto BLANK;
     fread(_buffer, 1, _buffer_size, _file);
     if (ferror(_file)) {
-	printf("[INFO] File could not be read. \n");
+	printf("[INFO]: File could not be read. \n");
 	return NULL;
     }
     fclose(_file);
     
-    printf("[INFO] File have been loaded sucessfully. \n");
+    printf("[INFO]: File have been loaded sucessfully. \n");
     return _buffer;
     
 BLANK:
-    printf("[INFO] File is blank. \n");
+    printf("[INFO]: File is blank. \n");
     fclose(_file);
     
     _buffer = (char *)malloc(sizeof(char));
@@ -147,7 +147,7 @@ Texture Molson(_load_texture)(const char *_file_path, bool _alpha) {
     stbi_image_free(_data);
     
     _new_texture.path = _file_path;
-    printf("[INFO] Texture had been loaded successfully. \n");
+    printf("[INFO]: Texture had been loaded successfully. \n");
     return _new_texture;
 }
 
@@ -164,7 +164,7 @@ void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, 
 
     _fragment_code = fopen(_fragment_path, "r");
     if (_fragment_code == NULL) {
-	printf("[FAILED] Fragment shader file could not be loaded. \n");
+	printf("[FAILED]: Fragment shader file could not be loaded. \n");
 	fclose(_fragment_code);
 	_shader->ID = -1;
 	return;
@@ -174,7 +174,7 @@ void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, 
     _buffer_length = ftell(_fragment_code);
     _fragment_buffer = (char *)malloc(_buffer_length + 1);
     if (_fragment_buffer == NULL) {
-	printf("[FAILED] Fragment shader variable could not be allocated. \n");
+	printf("[FAILED]: Fragment shader variable could not be allocated. \n");
 	fclose(_fragment_code);
 	_shader->ID = -1;
 	return;
@@ -182,7 +182,7 @@ void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, 
     if (fseek(_fragment_code, 0, SEEK_SET) < 0) goto BLANK;
     fread(_fragment_buffer, 1, _buffer_length, _fragment_code);
     if (ferror(_fragment_code)) {
-	printf("[FAILED] Fragment shader file could not be read. \n");
+	printf("[FAILED]: Fragment shader file could not be read. \n");
 	fclose(_fragment_code);
 	_shader->ID = -1;
 	return;
@@ -192,7 +192,7 @@ void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, 
     
     _vertex_code = fopen(_vertex_path, "r");
     if (_vertex_code == NULL) {
-	printf("[FAILED] Vertex shader file could not be loaded. \n");
+	printf("[FAILED]: Vertex shader file could not be loaded. \n");
 	fclose(_vertex_code);
 	_shader->ID = -1;
 	return;
@@ -202,7 +202,7 @@ void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, 
     _buffer_length = ftell(_vertex_code);
     _vertex_buffer = (char *)malloc(_buffer_length + 1);
     if (_vertex_buffer == NULL) {
-	printf("[FAILED] Vertex shader variable could not be allocated. \n");
+	printf("[FAILED]: Vertex shader variable could not be allocated. \n");
 	fclose(_vertex_code);
 	_shader->ID = -1;
 	return;
@@ -211,7 +211,7 @@ void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, 
     if (fseek(_vertex_code, 0, SEEK_SET < 0)) goto BLANK;
     fread(_vertex_buffer, 1, _buffer_length, _vertex_code);
     if (ferror(_vertex_code)) {
-	printf("[FAILED] Fragment shader file could not be read. \n");
+	printf("[FAILED]: Fragment shader file could not be read. \n");
 	fclose(_vertex_code);
 	_shader->ID = -1;
 	return;
@@ -234,11 +234,11 @@ void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, 
     glGetShaderiv(_shader->_vertex_shader, GL_COMPILE_STATUS, &_success);
     if (!_success) {
 	glGetShaderInfoLog(_shader->_vertex_shader, 512, NULL, _info_log);
-	printf("[FAILED] Vertex shader compilation failed. \n");
-	printf("[INFO_LOG] %s. \n", _info_log);
+	printf("[FAILED]: Vertex shader compilation failed. \n");
+	printf("[INFO_LOG]: %s. \n", _info_log);
 	return;
     }
-    printf("[INFO] Vertex shader compiled successfully. \n");
+    printf("[INFO]: Vertex shader compiled successfully. \n");
     
     _shader->_fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(_shader->_fragment_shader, 1, (GLchar const * const *)&_fragment_buffer, NULL);
@@ -246,11 +246,11 @@ void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, 
     glGetShaderiv(_shader->_fragment_shader, GL_COMPILE_STATUS, &_success);
     if (!_success) {
 	glGetShaderInfoLog(_shader->_fragment_shader, 512, NULL, _info_log);
-	printf("[FAILED] Fragment shader compilation failed. \n");
-	printf("[INFO_LOG] %s. \n", _info_log);
+	printf("[FAILED]: Fragment shader compilation failed. \n");
+	printf("[INFO_LOG]: %s. \n", _info_log);
 	return;
     }
-    printf("[INFO] Fragment shader compiled successfully. \n");
+    printf("[INFO]: Fragment shader compiled successfully. \n");
     
     _shader->ID = glCreateProgram();
     glAttachShader(_shader->ID, _shader->_fragment_shader);
@@ -259,15 +259,15 @@ void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, 
     glGetProgramiv(_shader->ID, GL_LINK_STATUS, &_success);
     if (!_success) {
 	glGetProgramInfoLog(_shader->ID, 512, NULL, _info_log);
-	printf("[FAILED] Shader program linking failed. \n");
-	printf("[INFO_LOG] %s. \n", _info_log);
+	printf("[FAILED]: Shader program linking failed. \n");
+	printf("[INFO_LOG]: %s. \n", _info_log);
 	return;
     }
-    printf("[INFO] Shader program had been linked successfully. \n");
+    printf("[INFO]: Shader program had been linked successfully. \n");
     return;
     
 BLANK:
-    printf("[INFO] Shader file is blank. \n");
+    printf("[INFO]: Shader file is blank. \n");
     if (_fragment_code) {
 	fclose(_fragment_code);
     }
@@ -282,7 +282,7 @@ void Molson(_destroy)(Shader *_shader) {
     glDeleteShader(_shader->_fragment_shader);
     glDeleteShader(_shader->_vertex_shader);
     glDeleteProgram(_shader->ID);
-    printf("[INFO] Shaders deleted successfully. \n");
+    printf("[INFO]: Shaders deleted successfully. \n");
     return;
 }
 

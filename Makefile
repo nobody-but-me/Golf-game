@@ -1,5 +1,5 @@
 
-INCLUDE := -I./include/ -I./lib/ -I./lib/glm/ -
+INCLUDE := -I./include/ -I./lib/ -I./lib/glm/
 CFLAGS := -lglfw -lm -Werror -Wall -pedantic
 CC := g++
 
@@ -28,3 +28,4 @@ $(OBJS): ./objs
 .PHONY: clean
 clean:
 	rm -rf ./build ./objs
+	rm -rf ./*.o

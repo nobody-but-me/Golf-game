@@ -22,12 +22,15 @@ namespace Core {
 	    Shader main_shader;
 	    
 	public:
-	    
+	    const int *getWindowHeight();
+	    const int *getWindowWidth();
 	    Shader *getMainShader();
 	    GLFWwindow *getWindow();
+	    
+	    bool isKeyPressed(int p_key);
 	    bool isRunning();
 	    
-	    Application(std::string title);
+	    Application(std::string p_title);
 	    ~Application();
 	    
     };
