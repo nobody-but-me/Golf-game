@@ -35,25 +35,43 @@ namespace Game {
 	return;
     }
     
-    void process(float delta) {
-	player->render(engine->getMainShader());
-	ground->render(engine->getMainShader());
-	
+    // TODO: put it somewhere else. That's not the right place for such function.
+    static inline float lerp(float a, float b, float t) {
+	return a * (1.0 - t) + (b * t);
+    }
+    
+    const float ACCELERATION = 0.2f;
+    const float FRICTION = 0.07f;
+    const float SPEED = 0.2f;
+    
+    glm::vec2 velocity = glm::vec2(0.0f, 0.0f);
+    static void move() {
+	float direction = 0.0f;
 	if (engine->isKeyPressed(GOLF_D)) {
-	    player->self.position[0] += 0.5f;
+	    direction = 1.0f;
 	}
 	else if (engine->isKeyPressed(GOLF_A)) {
-	    player->self.position[0] -= 0.5f;
+	    direction = -1.0f;
 	}
-	if (engine->isKeyPressed(GOLF_W)) {
-	    player->self.position[1] += 0.5f;
-	}
-	else if (engine->isKeyPressed(GOLF_S)) {
-	    player->self.position[1] -= 0.5f;
-	}
-	player->isCollidingRect(ground, true);
 	
+	if (direction >= 0.5f || direction < -0.5f) {
+	    velocity.x = lerp(velocity.x, direction * SPEED, ACCELERATION);
+	} else {
+	    velocity.x = lerp(velocity.x, 0.0f, FRICTION);
+	}
 	return;
+    }
+    
+    void process(double delta) {
+	move();
+	player->self.position.x += velocity.x * delta;
+	player->self.position.y += velocity.y * delta;
+	return;
+    }
+    void render() {
+	player->render(engine->getMainShader());
+	ground->render(engine->getMainShader());
+	player->isCollidingRect(ground, true);
     }
     
     void destroy() {

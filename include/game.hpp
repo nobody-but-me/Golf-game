@@ -8,7 +8,8 @@
 namespace Game {
     
     void setApplication(Core::Application *p_engine);
-    void process(float delta);
+    void process(double delta);
+    void render();
     void ready();
     
     void destroy();
