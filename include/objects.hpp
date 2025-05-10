@@ -42,6 +42,18 @@ namespace Objects {
 	    
     };
     
+    class Rectangle {
+	public:
+	    bool initialized;
+	    std::string name;
+	    Object self;
+	    
+	    Rectangle(std::string p_name);
+	    ~Rectangle();
+	    
+	    void render(Shader *p_shader);
+    };
+    
 }
 
 #endif//OBJECTS_H
