@@ -1,6 +1,6 @@
 
 INCLUDE := -I./include/ -I./lib/ -I./lib/glm/
-CFLAGS := -lglfw -lm -Werror -Wall -pedantic
+CFLAGS := -lglfw -lm -Werror -Wall -pedantic -Wno-unused-but-set-variable
 CC := g++
 
 SRC_PATH := ./src

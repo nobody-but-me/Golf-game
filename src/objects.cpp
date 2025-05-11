@@ -60,41 +60,8 @@ namespace Objects {
 	return;
     }
     
-    static void adjustPositionRect(Object *p_self, Rectangle *p_rect) {
-	// TODO: if object or p_rect Z position change, this will not be recognized. What it means: if an object is closer to the camera, the follow script will not consider this, counting only the scale of the both objects, causing the "main object" to "enter" the p_rect -- it's not really entering since since they are in different layers of Z position.
-	const glm::vec2 SELF_CENTER = glm::vec2( p_self->position[0] + p_self->scale[0] / 2, p_self->position[1] + p_self->scale[1] / 2);
-	const glm::vec2 RECT_CENTER = glm::vec2( p_rect->self.position[0] + p_rect->self.scale[0] / 2, p_rect->self.position[1] + p_rect->self.scale[1] / 2);
-	
-	const glm::vec2 SELF_HALF_SIZE = glm::vec2( p_self->scale[0]      * 0.5f, p_self->scale[1]      * 0.5f );
-	const glm::vec2 RECT_HALF_SIZE = glm::vec2( p_rect->self.scale[0] * 0.5f, p_rect->self.scale[1] * 0.5f );
-	const glm::vec2 DISTANCE = SELF_CENTER - RECT_CENTER;
-	const float X_MIN_DIST = SELF_HALF_SIZE[0] + RECT_HALF_SIZE[0] - fabsf(DISTANCE[0]);
-	const float Y_MIN_DIST = SELF_HALF_SIZE[1] + RECT_HALF_SIZE[1] - fabsf(DISTANCE[1]);
-	
-	if (X_MIN_DIST < Y_MIN_DIST) {
-	    p_self->position[0] += copysignf(X_MIN_DIST, DISTANCE[0]);
-	} else {
-	    p_self->position[1] += copysignf(Y_MIN_DIST, DISTANCE[1]);
-	}
-    }
-    static bool rectCollisionDetection(Object *p_self, Rectangle *p_rect) {
-	if (
-	    p_self->position[0] + p_self->scale[0] > p_rect->self.position[0]         &&
-	    p_self->position[0] < p_rect->self.position[0] + p_rect->self.scale[0] &&
-	    p_self->position[1] + p_self->scale[1] > p_rect->self.position[1]         &&
-	    p_self->position[1] < p_rect->self.position[1] + p_rect->self.scale[1]
-	) {
-	    return true;
-	}
-	return false;
-    }
-    bool Sprite::isCollidingRect(Rectangle *p_rect, bool p_adjust_position) {
-	if (rectCollisionDetection(&self, p_rect)) {
-	    if (p_adjust_position == true) {
-		adjustPositionRect(&self, p_rect);
-	    }
-	    return true;
-	}
+    bool Sprite::isCollidingRect(Rectangle *p_rect) {
+	// return Physics::isAABBColliding(&self, &p_rect->self);
 	return false;
     }
     
@@ -165,13 +132,8 @@ namespace Objects {
 	return;
     }
     
-    bool Rectangle::isCollidingRect(Rectangle *p_rect, bool p_adjust_position) {
-	if (rectCollisionDetection(&self, p_rect)) {
-	    if (p_adjust_position == true) {
-		adjustPositionRect(&self, p_rect);
-	    }
-	    return true;
-	}
+    bool Rectangle::isCollidingRect(Rectangle *p_rect) {
+	// return Physics::isAABBColliding(&self, &p_rect->self);
 	return false;
     }
     

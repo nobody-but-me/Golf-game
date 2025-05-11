@@ -39,7 +39,7 @@ namespace Objects {
 	    Sprite(std::string p_name, std::string p_texture_path, bool p_alpha);
 	    ~Sprite();
 	    
-	    bool isCollidingRect(Rectangle *p_rect, bool p_adjust_position = false);
+	    bool isCollidingRect(Rectangle *p_rect);
 	    void render(Shader *p_shader);
 	    
     };
@@ -53,7 +53,7 @@ namespace Objects {
 	    Rectangle(std::string p_name);
 	    ~Rectangle();
 	    
-	    bool isCollidingRect(Rectangle *p_object, bool p_adjust_position = false);
+	    bool isCollidingRect(Rectangle *p_object);
 	    void render(Shader *p_shader);
     };
     
