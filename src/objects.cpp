@@ -26,7 +26,8 @@ namespace Objects {
 	}
 	return;
     }
-    Sprite::Sprite(std::string p_name, std::string p_texture_path, bool p_alpha) {
+    Sprite::Sprite(std::string p_name, std::string p_texture_path, bool p_alpha, bool p_verbose) {
+	verbose = p_verbose;
 	float vertices[] = {
 	    0.0f, 1.0f, 0.0f, 1.0f,
 	    1.0f, 0.0f, 1.0f, 0.0f,
@@ -98,7 +99,8 @@ namespace Objects {
 	return;
     }
     
-    Rectangle::Rectangle(std::string p_name) {
+    Rectangle::Rectangle(std::string p_name, bool p_verbose) {
+	verbose = p_verbose;
 	float vertices[] = {
 	    0.0f, 1.0f, 0.0f, 1.0f,
 	    1.0f, 0.0f, 1.0f, 0.0f,

@@ -37,7 +37,7 @@ namespace Objects {
 	    bool verbose;
 	    Object self;
 	    
-	    Sprite(std::string p_name, std::string p_texture_path, bool p_alpha);
+	    Sprite(std::string p_name, std::string p_texture_path, bool p_alpha, bool p_verbose);
 	    ~Sprite();
 	    
 	    bool isCollidingRect(Rectangle *p_rect);
@@ -52,7 +52,7 @@ namespace Objects {
 	    bool verbose;
 	    Object self;
 	    
-	    Rectangle(std::string p_name);
+	    Rectangle(std::string p_name, bool p_verbose);
 	    ~Rectangle();
 	    
 	    bool isCollidingRect(Rectangle *p_object);
