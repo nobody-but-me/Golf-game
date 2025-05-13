@@ -57,7 +57,6 @@ namespace Game {
     const float SPEED = 0.2f;
     
     glm::vec2 velocity = glm::vec2(0.0f, 0.0f);
-    
     static void move(double delta) {
 	float direction = 0.0f;
 	if (engine->isKeyPressed(GOLF_D)) {
@@ -66,12 +65,37 @@ namespace Game {
 	else if (engine->isKeyPressed(GOLF_A)) {
 	    direction = -1.0f;
 	}
-	
-	if (direction >= 0.5f || direction < -0.5f) {
-	    velocity.x = Math::lerp(velocity.x, direction * SPEED, ACCELERATION);
-	} else {
-	    velocity.x = Math::lerp(velocity.x, 0.0f, FRICTION);
+	else if (engine->isKeyPressed(GOLF_X)) {
+	    direction = 50.0f;
 	}
+	else if (engine->isKeyPressed(GOLF_Z)) {
+	    direction = -10.0f;
+	}
+	
+	// TODO: find a better and more precise way to do that.
+	Objects::Rectangle forecast_player("forecastPlayer");
+	forecast_player.self.position = player->self.position;
+	forecast_player.self.scale = player->self.scale;
+	forecast_player.verbose = false;
+	float forecast_velocity;
+	
+	if (direction > 0.5f || direction < -0.5f) {
+	    forecast_velocity = Math::lerp(velocity.x, direction * SPEED, ACCELERATION);
+	} else {
+	    forecast_velocity = Math::lerp(velocity.x, 0.0f, FRICTION);
+	}
+	forecast_player.self.position.x += forecast_velocity * delta;
+	if (Physics::isColliding(&forecast_player, wall)) {
+	    velocity.x = 0.0f;
+	    return;
+	}
+	velocity.x = forecast_velocity;
+	// if (direction >= 0.5f || direction < -0.5f) {
+	//     velocity.x = Math::lerp(velocity.x, direction * SPEED, ACCELERATION);
+	// } else {
+	//     velocity.x = Math::lerp(velocity.x, 0.0f, FRICTION);
+	// }
+	
 	return;
     }
     

@@ -34,6 +34,7 @@ namespace Objects {
 	public:
 	    bool initialized;
 	    std::string name;
+	    bool verbose;
 	    Object self;
 	    
 	    Sprite(std::string p_name, std::string p_texture_path, bool p_alpha);
@@ -48,6 +49,7 @@ namespace Objects {
 	public:
 	    bool initialized;
 	    std::string name;
+	    bool verbose;
 	    Object self;
 	    
 	    Rectangle(std::string p_name);

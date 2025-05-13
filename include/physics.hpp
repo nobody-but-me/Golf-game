@@ -3,7 +3,27 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#endif//PHYSICS_H
+#include "./objects.hpp"
+
+namespace Physics {
+    bool isColliding(Objects::Rectangle *rect1, Objects::Rectangle *rect2);
+}
+
+#endif//PYYSICS_Y
 #ifdef PHYSICS_IMPLEMENTATION
 
-#endif//PHYSICS_H
+#include <iostream>
+#include "./objects.hpp"
+
+namespace Physics {
+    bool isColliding(Objects::Rectangle *rect1, Objects::Rectangle *rect2) {
+	bool is_colliding = true;
+	
+	is_colliding &= (rect1->self.position.x < rect2->self.position.x + rect2->self.scale.x && rect1->self.position.x + rect1->self.scale.x > rect2->self.position.x) || (rect1->self.position.x + rect1->self.scale.x > rect2->self.position.x && rect1->self.position.x < rect2->self.position.x + rect2->self.scale.x);
+	is_colliding &= (rect1->self.position.y < rect2->self.position.y + rect2->self.scale.y && rect1->self.position.y + rect1->self.scale.y > rect2->self.position.y) || (rect1->self.position.y + rect1->self.scale.y > rect2->self.position.y && rect1->self.position.y < rect2->self.position.y + rect2->self.scale.y);
+	
+	return is_colliding;
+    }
+}
+
+#endif//PYYSICS_Y

@@ -21,7 +21,9 @@ namespace Objects {
 	glDeleteBuffers(1, &self.vbo);
 	glDeleteBuffers(1, &self.ebo);
 	
-	std::cout << "[INFO]: Sprite had been destroyed successfully. " << std::endl;
+	if (verbose == true) {
+	    std::cout << "[INFO]: Sprite had been destroyed successfully. " << std::endl;
+	}
 	return;
     }
     Sprite::Sprite(std::string p_name, std::string p_texture_path, bool p_alpha) {
@@ -56,7 +58,9 @@ namespace Objects {
 	}
 	
 	initialized = 1;
-	std::cout << "[INFO]: Sprite " << name << " had been created." << std::endl;
+	if (verbose == true) {
+	    std::cout << "[INFO]: Sprite " << name << " had been created." << std::endl;
+	}
 	return;
     }
     
@@ -119,7 +123,9 @@ namespace Objects {
 	glBindVertexArray(0);
 	
 	initialized = 1;
-	std::cout << "[INFO]: Rectangle " << name << " had been created." << std::endl;
+	if (verbose == true) {
+	    std::cout << "[INFO]: Rectangle " << name << " had been created." << std::endl;
+	}
 	return;
     }
     
@@ -128,7 +134,9 @@ namespace Objects {
 	glDeleteBuffers(1, &self.vbo);
 	glDeleteBuffers(1, &self.ebo);
 	
-	std::cout << "[INFO]: Rectangle had been destroyed successfully. " << std::endl;
+	if (verbose == true) {
+	    std::cout << "[INFO]: Rectangle had been destroyed successfully. " << std::endl;
+	}
 	return;
     }
     
