@@ -55,8 +55,12 @@ namespace Game {
     const int MAX_JUMP_QUANTITY = 3;
     const float JUMP_FORCE = 0.4f;
     const float FRICTION = 0.07f;
-    const float GRAVITY = 0.01f;
     const float SPEED = 0.26f;
+    
+    const float NORMAL_GRAVITY = 0.008f;
+    const float WALL_GRAVITY = 0.0008f;
+    
+    float GRAVITY = NORMAL_GRAVITY;
     
     int jump_number = 1;
     
@@ -87,11 +91,24 @@ namespace Game {
 	    if (velocity.x > 0.0f) {
 		player->self.position.x = wall->self.position.x - wall->self.scale.x;
 		velocity.x = 0.0f;
+		
+		// wall jump;
+		if (!Physics::isRectOnFloor(player, ground)) {
+		    velocity.y = 0.0f;
+		    GRAVITY = WALL_GRAVITY;
+		    velocity.y -= GRAVITY * delta;
+		    if (jump_number == MAX_JUMP_QUANTITY) {
+			jump_number = 2;
+		    }
+		    return;
+		}
 	    } else if (velocity.x < 0.0f) {
 		player->self.position.x = wall->self.position.x + wall->self.scale.x;
 		velocity.x = 0.0f;
 	    }
 	    return;
+	} else {
+	    GRAVITY = NORMAL_GRAVITY;
 	}
 	velocity.x = forecast_velocity;
 	return;
@@ -117,6 +134,7 @@ namespace Game {
     void input(GLFWwindow *p_window, int key, int scancode, int action, int mods) {
 	if (key == GOLF_UP && action == GLFW_PRESS) {
 	    if (jump_number < MAX_JUMP_QUANTITY) {
+		GRAVITY = NORMAL_GRAVITY;
 		jump_number++;
 		velocity.y = JUMP_FORCE * jump_number / 2;
 	    }
