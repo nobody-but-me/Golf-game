@@ -35,6 +35,13 @@ namespace Core {
 	}
 	return false;
     }
+    bool Application::isKeyJustPressed(int p_key) {
+	int state = glfwGetKey(window, p_key);
+	if (state == GLFW_RELEASE) {
+	    return true;
+	}
+	return false;
+    }
     bool Application::isRunning() {
 	return running;
     }

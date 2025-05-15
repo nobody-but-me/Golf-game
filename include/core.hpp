@@ -66,6 +66,7 @@ namespace Core {
 	    GLFWwindow *getWindow();
 	    
 	    bool isKeyPressed(int p_key);
+	    bool isKeyJustPressed(int p_key);
 	    bool isRunning();
 	    
 	    Application(std::string p_title);

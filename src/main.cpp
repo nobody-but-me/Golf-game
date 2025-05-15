@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
     int updates = 0;
     int frames = 0;
     
+    glfwSetKeyCallback(engine.getWindow(), Game::input);
     Game::ready();
     while (!glfwWindowShouldClose(engine.getWindow())) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

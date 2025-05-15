@@ -52,10 +52,13 @@ namespace Game {
     }
     
     const float ACCELERATION = 0.2f;
+    const int MAX_JUMP_QUANTITY = 3;
     const float JUMP_FORCE = 0.4f;
     const float FRICTION = 0.07f;
     const float GRAVITY = 0.01f;
     const float SPEED = 0.26f;
+    
+    int jump_number = 1;
     
     glm::vec2 velocity = glm::vec2(0.0f, 0.0f);
     static void move(double delta) {
@@ -100,19 +103,27 @@ namespace Game {
 	player->self.position.y += velocity.y;
 	
 	// this reminds me of the game maker times...
-	if (!Physics::isRectOnFloor(player, ground)) {
+	if (!Physics::isRectOnFloor(player, ground)){
 	    velocity.y -= GRAVITY * delta;
 	} else {
-	    if (engine->isKeyPressed(GOLF_SPACE) || engine->isKeyPressed(GOLF_UP) || engine->isKeyPressed(GOLF_W)) {
-		velocity.y = JUMP_FORCE;
-	    } else {
-		player->self.position.y = ground->self.position.y + ground->self.scale.y;
-		velocity.y = 0.0f;
-		return;
+	    jump_number = 1;
+	    
+	    player->self.position.y = ground->self.position.y + ground->self.scale.y;
+	    velocity.y = 0.0f;
+	    return;
+	}
+	return;
+    }
+    void input(GLFWwindow *p_window, int key, int scancode, int action, int mods) {
+	if (key == GOLF_UP && action == GLFW_PRESS) {
+	    if (jump_number < MAX_JUMP_QUANTITY) {
+		jump_number++;
+		velocity.y = JUMP_FORCE * jump_number / 2;
 	    }
 	}
 	return;
     }
+    
     void render() {
 	player->render(engine->getMainShader());
 	player->render(engine->getMainShader());
