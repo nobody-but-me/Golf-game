@@ -7,6 +7,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 #include <stdbool.h>
+#include <string>
 
 
 // --------------------------------------------------
@@ -46,6 +47,9 @@ void Molson(_set_vector2_f)(const char *_name, glm::vec2 _value, bool _use_shade
 void Molson(_set_int)(const char *_name, int _value, bool _use_shader, Shader *_shader);
 
 // --------------------------------------------------
+
+#include <vector>
+std::vector<std::vector<int>> Molson(getImageRGBValues)(std::string p_filepath);
 
 #endif//MOLSON_H
 #ifdef MOLSON_IMPLEMENTATION
@@ -328,6 +332,32 @@ void Molson(_set_bool)(const char *_name, bool _value, Shader *_shader) {
 }
 
 // --------------------------------------------------
+
+#include <vector>
+std::vector<std::vector<int>> Molson(getImageRGBValues)(std::string p_filepath) {
+    int width, height, channels;
+    unsigned char *data = stbi_load(p_filepath.c_str(), &width, &height, &channels, 3);
+    
+    const int RGB_SIZE = width * height;
+    std::vector<std::vector<int>> RGBs;
+    if (data != nullptr && width > 0 && height > 0) {
+	for (int i = 0; i < RGB_SIZE;) {
+	    std::vector<int> rgb;
+	    rgb.push_back(data[i]);
+	    rgb.push_back(data[i + 1]);
+	    rgb.push_back(data[i + 2]);
+	    RGBs.push_back(rgb);
+	    printf("[MOLSON]: R: %d; G: %d; B: %d; \n", data[i], data[i + 1], data[i + 2]);
+	    i += 3;
+	}
+	// [[85, 87, 86], [255, 0, 255]] <- array reference
+	stbi_image_free(data);
+	return RGBs;
+    }
+    printf("[MOLSON]: something went wrong about getting image colours.");
+    stbi_image_free(data);
+    return RGBs;
+}
 
 
 #endif

@@ -24,6 +24,9 @@ int main(int argc, char *argv[]) {
     
     glfwSetKeyCallback(engine.getWindow(), Game::input);
     Game::ready();
+    
+    Molson(getImageRGBValues)("./assets/color-image-test.png");
+    
     while (!glfwWindowShouldClose(engine.getWindow())) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.024f, 0.024f, 0.024f, 1.0f);
