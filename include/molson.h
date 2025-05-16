@@ -49,7 +49,11 @@ void Molson(_set_int)(const char *_name, int _value, bool _use_shader, Shader *_
 // --------------------------------------------------
 
 #include <vector>
-std::vector<std::vector<int>> Molson(getImageRGBValues)(std::string p_filepath);
+typedef struct {
+    std::vector<std::vector<int>> RGBs;
+    std::vector<glm::vec2> position;
+} Pixels;
+Pixels Molson(getImageRGBValues)(std::string p_filepath);
 
 #endif//MOLSON_H
 #ifdef MOLSON_IMPLEMENTATION
@@ -334,29 +338,42 @@ void Molson(_set_bool)(const char *_name, bool _value, Shader *_shader) {
 // --------------------------------------------------
 
 #include <vector>
-std::vector<std::vector<int>> Molson(getImageRGBValues)(std::string p_filepath) {
+Pixels Molson(getImageRGBValues)(std::string p_filepath) {
+    Pixels d;
+    
     int width, height, channels;
     unsigned char *data = stbi_load(p_filepath.c_str(), &width, &height, &channels, 3);
     
     const int RGB_SIZE = width * height;
-    std::vector<std::vector<int>> RGBs;
     if (data != nullptr && width > 0 && height > 0) {
+	printf("[MOLSON]: %d. \n", RGB_SIZE);
+	int x, y = 0;
 	for (int i = 0; i < RGB_SIZE;) {
 	    std::vector<int> rgb;
-	    rgb.push_back(data[i]);
-	    rgb.push_back(data[i + 1]);
-	    rgb.push_back(data[i + 2]);
-	    RGBs.push_back(rgb);
-	    printf("[MOLSON]: R: %d; G: %d; B: %d; \n", data[i], data[i + 1], data[i + 2]);
-	    i += 3;
+	    rgb.push_back(data[i * 3]);
+	    rgb.push_back(data[i * 3 + 1]);
+	    rgb.push_back(data[i * 3 + 2]);
+	    
+	    d.position.push_back(glm::vec2(x, y));
+	    if (x < width) x++;
+	    else {
+		x = 0;
+		y--;
+	    }
+	    printf("[MOLSON]: x: %d, y: %d; \n", x, y); // printing again
+	    
+	    d.RGBs.push_back(rgb);
+	    // printf("[MOLSON]: R: %d; G: %d; B: %d; \n", data[i], data[i + 1], data[i + 2]); // printing
+	    i++;
 	}
+	// printf("[MOLSON]: %ld. \n", d.RGBs.size());
 	// [[85, 87, 86], [255, 0, 255]] <- array reference
 	stbi_image_free(data);
-	return RGBs;
+	return d;
     }
     printf("[MOLSON]: something went wrong about getting image colours.");
     stbi_image_free(data);
-    return RGBs;
+    return d;
 }
 
 

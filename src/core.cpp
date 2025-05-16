@@ -1,10 +1,12 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "../include/glad.h"
 #include <GLFW/glfw3.h>
 
+#include "../include/objects.hpp"
 #include "../include/core.hpp"
 #define MOLSON_IMPLEMENTATION
 #include "../include/molson.h"
@@ -125,4 +127,31 @@ namespace Core {
 	return;
     }
     
+    
+    std::vector<Objects::Rectangle*> level;
+    void Application::buildLevel(std::string p_level_path) {
+	Pixels d = Molson(getImageRGBValues)(p_level_path);
+	std::vector<std::vector<int>> l = d.RGBs;
+	std::vector<glm::vec2> p = d.position;
+	for (int i = 0; i < (int)l.size(); i++) {
+	    if (l[i][0] == 0 && l[i][1] == 0 && l[i][2] == 255) {
+		Objects::Rectangle *block = new Objects::Rectangle("block", false);
+		
+		block->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+		block->self.color = glm::vec3(255.0f, 0.0f, 0.0f);
+		block->self.scale = glm::vec2(2.0f, 2.0f);
+		
+		block->self.position = glm::vec3(p[i].x * 2, p[i].y * 2, 0.0f);
+		level.push_back(block);
+	    }
+	}
+	std::cout << "[INFO] level had been built." << std::endl;
+	return;
+    }
+    void Application::renderLevel(Shader *p_shader) {
+	for (int i = 0; i < (int)level.size(); i++) {
+	    level[i]->render(p_shader);
+	}
+	return;
+    }
 }

@@ -69,6 +69,10 @@ namespace Core {
 	    bool isKeyJustPressed(int p_key);
 	    bool isRunning();
 	    
+	    void buildLevel(std::string p_level_path);
+	    void renderLevel(Shader *p_shader);
+	    void destroyLevel();
+	    
 	    Application(std::string p_title);
 	    ~Application();
 	    

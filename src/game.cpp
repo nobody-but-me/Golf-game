@@ -29,6 +29,8 @@ namespace Game {
     Objects::Rectangle *wall;
     
     void ready() {
+	engine->buildLevel("./assets/test-level.png");
+	
 	player = new Objects::Rectangle("Player", false);
 	ground = new Objects::Rectangle("Ground", false);
 	wall   = new Objects::Rectangle("Wall", false);
@@ -143,6 +145,8 @@ namespace Game {
     }
     
     void render() {
+	engine->renderLevel(engine->getMainShader());
+	
 	player->render(engine->getMainShader());
 	player->render(engine->getMainShader());
 	ground->render(engine->getMainShader());
