@@ -139,13 +139,12 @@ namespace Core {
     void Application::buildLevel(std::string p_level_path) {
 	int width, height, channels;
 	unsigned char *data = stbi_load(p_level_path.c_str(), &width, &height, &channels, 3);
-	
-	/* 
-	a[ 
+	/*
+	a[
 	    b[ c[255, 255, 255], c[255, 0, 0], c[0, 0, 255] ],
 	    b[ c[255, 255, 255], c[255, 0, 0], c[0, 0, 255] ],
 	    b[ c[255, 255, 255], c[255, 0, 0], c[0, 0, 255] ],
-	]; 
+	];
 	*/
 	std::vector<std::vector<unsigned int>> RGB;
 	if (data != nullptr && width > 0 && height > 0) {
@@ -170,17 +169,24 @@ namespace Core {
 	
 	for (int y = 0; y < height; ++y) {
 	    for (int x = 0; x < width; ++x) {
-		// std::cout << "R :: " << matrix[y][x][0] << std::endl; yeah;
-		// std::cout << "G :: " << matrix[y][x][1] << std::endl; yeah;
-		// std::cout << "B :: " << matrix[y][x][2] << std::endl; yeah;
 		if (matrix[y][x][0] == 0 && matrix[y][x][1] == 0 && matrix[y][x][2] == 255) {
 		    Objects::Rectangle *block = new Objects::Rectangle("block", false);
-	
+		    
 		    block->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 		    block->self.color = glm::vec3(42.0f, 93.0f, 232.0f);
 		    block->self.scale = glm::vec2(3.0f, 3.0f);
-		
-		    block->self.position = glm::vec3((x * block->self.scale.x) * -1, (y * block->self.scale.y) * -1, 0.0f);
+		    
+		    block->self.position = glm::vec3((x * block->self.scale.x) - width / 2, ((y * block->self.scale.y) * -1) + height / 2, 0.0f);
+		    level.push_back(block);
+		}
+		else if (matrix[y][x][0] == 255 && matrix[y][x][1] == 0 && matrix[y][x][2] == 0) {
+		    Objects::Rectangle *block = new Objects::Rectangle("idk", false);
+		    
+		    block->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+		    block->self.color = glm::vec3(255.0f, 0.0f, 0.0f);
+		    block->self.scale = glm::vec2(3.0f, 3.0f);
+		    
+		    block->self.position = glm::vec3((x * block->self.scale.x) - width / 2, ((y * block->self.scale.y) * -1) + height / 2, 0.0f);
 		    level.push_back(block);
 		}
 	    }
@@ -188,12 +194,14 @@ namespace Core {
 	std::cout << "[INFO] level had been built.";
 	return;
     }
+    
     void Application::renderLevel(Shader *p_shader) {
 	for (int i = 0; i < (int)level.size(); i++) {
 	    level[i]->render(p_shader);
 	}
 	return;
     }
+    
     void Application::destroyLevel() {
 	for (int i = 0; i < (int)level.size(); i++) {
 	    delete level[i];

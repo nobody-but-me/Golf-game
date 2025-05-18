@@ -44,16 +44,12 @@ namespace Game {
     
     const float ACCELERATION = 0.2f;
     const int MAX_JUMP_QUANTITY = 3;
-    const float JUMP_FORCE = 0.4f;
+    const float JUMP_FORCE = 35.0f;
     const float FRICTION = 0.07f;
-    const float SPEED = 0.26f;
+    const float SPEED = 30.0f;
     
-    const float NORMAL_GRAVITY = 0.0008f;
-    const float WALL_GRAVITY = 0.00008f;
-    
+    const float NORMAL_GRAVITY = 0.08f;
     float GRAVITY = NORMAL_GRAVITY;
-    
-    int jump_number = 1;
     
     glm::vec2 velocity = glm::vec2(0.0f, 0.0f);
     static void move(double delta) {
@@ -79,29 +75,18 @@ namespace Game {
 	forecast_player.self.position.x += forecast_velocity * delta;
 	// found out this method. It works, but for sure has problems. That's the X-axis move and collide system.
 	for (int i = 0; i < (int)level.size(); i++) {
-	    if (Physics::isColliding(&forecast_player, level[i] )) {
-		if (velocity.x > 0.0f) {
-		    player->self.position.x = level[i]->self.position.x - level[i]->self.scale.x;
-		    velocity.x = 0.0f;
-		    
-		    // wall jump;
-		    if (!Physics::isRectOnFloor(player, level[i])) {
-			velocity.y = 0.0f;
-			GRAVITY = WALL_GRAVITY;
-			velocity.y -= GRAVITY * delta;
-			if (jump_number == MAX_JUMP_QUANTITY) {
-			    jump_number = 2;
-			}
-			return;
+	    if (level[i]->name == "block") {
+		if (Physics::isColliding(&forecast_player, level[i] )) {
+		    if (velocity.x > 0.0f) {
+			player->self.position.x = level[i]->self.position.x - level[i]->self.scale.x;
+			velocity.x = 0.0f;
+			
+		    } else if (velocity.x < 0.0f) {
+			player->self.position.x = level[i]->self.position.x + level[i]->self.scale.x;
+			velocity.x = 0.0f;
 		    }
-		} else if (velocity.x < 0.0f) {
-		    player->self.position.x = level[i]->self.position.x + level[i]->self.scale.x;
-		    velocity.x = 0.0f;
+		    return;
 		}
-		return;
-	    } else {
-		if (GRAVITY == NORMAL_GRAVITY) break;
-		GRAVITY = NORMAL_GRAVITY;
 	    }
 	}
 	velocity.x = forecast_velocity;
@@ -111,30 +96,32 @@ namespace Game {
     void process(double delta) {
 	move(delta);
 	player->self.position.x += velocity.x * delta;
-	player->self.position.y += velocity.y;
+	player->self.position.y += velocity.y * delta;
 	
 	// this reminds me of the game maker times...
 	for (int i = 0; i < (int)level.size(); i++) {
-	    if (!Physics::isRectOnFloor(player, level[i])) {
-		velocity.y -= GRAVITY * delta;
-	    } else {
-		jump_number = 1;
-		
-		player->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
-		velocity.y = 0.0f;
-		return;
+	    if (level[i]->name == "block") {
+		if (!Physics::isRectOnFloor(player, level[i])) {
+		    velocity.y -= GRAVITY;
+		} else {
+		    if (velocity.y > 0.0f) {
+			player->self.position.y = level[i]->self.position.y - level[i]->self.scale.y;
+		    } else if (velocity.y < 0.0f) {
+			player->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
+		    }
+		    velocity.y = 0.0f;
+		    
+		    if (engine->isKeyPressed(GOLF_UP)) {
+			velocity.y = JUMP_FORCE;
+		    }
+		    return;
+		}
 	    }
 	}
 	return;
     }
     void input(GLFWwindow *p_window, int key, int scancode, int action, int mods) {
-	if (key == GOLF_UP && action == GLFW_PRESS) {
-	    if (jump_number < MAX_JUMP_QUANTITY) {
-		GRAVITY = NORMAL_GRAVITY;
-		jump_number++;
-		velocity.y = JUMP_FORCE * jump_number / 2;
-	    }
-	}
+	// detect inputs
 	return;
     }
     

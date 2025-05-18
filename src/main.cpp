@@ -9,18 +9,15 @@
 
 #include "../include/molson.h"
 
+#define TAU (3.1415 * 2.0)
 
 int main(int argc, char *argv[]) {
     Core::Application engine("Golfine << DEBUG");
     Game::setApplication(&engine);
     
     // TODO: change the place of this delta time logic.
-    static double limited_fps = 1.0f / 60.0f;
     double last_time = glfwGetTime();
-    double timer = last_time;
     double delta = 0;
-    int updates = 0;
-    int frames = 0;
     
     glfwSetKeyCallback(engine.getWindow(), Game::input);
     Game::ready();
@@ -32,22 +29,18 @@ int main(int argc, char *argv[]) {
 	    break;
 	}
 	
-	delta += (glfwGetTime() - last_time) / limited_fps;
+	delta = glfwGetTime() - last_time;
 	last_time = glfwGetTime();
-	while (delta >= 1.0f) {
-	    Game::process(delta);
-	    updates++;
-	    delta--;
-	}
-	Game::render();
-	frames++;
+	Game::process(delta);
 	
-	if (glfwGetTime() - timer > 1.0) {
-	    timer++;
-	    // std::cout << "FPS: " << frames << " Updates:" << updates << std::endl;
-	    updates = 0;
-	    frames = 0;
-	}
+	Game::render();
+	
+	// if (glfwGetTime() - timer > 1.0) {
+	//     timer++;
+	//     std::cout << "FPS: " << frames << " Updates:" << updates << std::endl;
+	//     updates = 0;
+	//     frames = 0;
+	// }
 	glfwSwapBuffers(engine.getWindow());
 	glfwPollEvents();
     }
