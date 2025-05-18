@@ -6,7 +6,9 @@
 #include "../include/glad.h"
 #include <GLFW/glfw3.h>
 
+
 #include "../include/objects.hpp"
+#include "../include/stb_image.h"
 #include "../include/core.hpp"
 #define MOLSON_IMPLEMENTATION
 #include "../include/molson.h"
@@ -125,32 +127,76 @@ namespace Core {
 	glfwTerminate();
 	std::cout << "\n[INFO]: Application destroyed. \n" << std::endl;
 	return;
+
     }
     
     
     std::vector<Objects::Rectangle*> level;
+    
+    std::vector<Objects::Rectangle*> &Application::getLevel() {
+	return level;
+    }
     void Application::buildLevel(std::string p_level_path) {
-	Pixels d = Molson(getImageRGBValues)(p_level_path);
-	std::vector<std::vector<int>> l = d.RGBs;
-	std::vector<glm::vec2> p = d.position;
-	for (int i = 0; i < (int)l.size(); i++) {
-	    if (l[i][0] == 0 && l[i][1] == 0 && l[i][2] == 255) {
-		Objects::Rectangle *block = new Objects::Rectangle("block", false);
+	int width, height, channels;
+	unsigned char *data = stbi_load(p_level_path.c_str(), &width, &height, &channels, 3);
+	
+	/* 
+	a[ 
+	    b[ c[255, 255, 255], c[255, 0, 0], c[0, 0, 255] ],
+	    b[ c[255, 255, 255], c[255, 0, 0], c[0, 0, 255] ],
+	    b[ c[255, 255, 255], c[255, 0, 0], c[0, 0, 255] ],
+	]; 
+	*/
+	std::vector<std::vector<unsigned int>> RGB;
+	if (data != nullptr && width > 0 && height > 0) {
+	    for (unsigned int i = 0; i < (unsigned int)(height * width); i++) {
+		std::vector<unsigned int> rgb;
+		rgb.push_back(data[i * 3]);
+		rgb.push_back(data[i * 3 + 1]);
+		rgb.push_back(data[i * 3 + 2]);
 		
-		block->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-		block->self.color = glm::vec3(255.0f, 0.0f, 0.0f);
-		block->self.scale = glm::vec2(2.0f, 2.0f);
-		
-		block->self.position = glm::vec3(p[i].x * 2, p[i].y * 2, 0.0f);
-		level.push_back(block);
+		RGB.push_back(rgb);
+	    }
+	    stbi_image_free(data);
+	}
+	// converting 2D vector into a 3D vector;
+	std::vector<std::vector<std::vector<unsigned int>>> matrix(height, std::vector<std::vector<unsigned int>>(width, std::vector<unsigned int>(3, 0)));
+	int cursor = 0;
+	for (int y = 0; y < height; y++) {
+	    for (int x = 0; x < width; x++) {
+		matrix[y][x] = RGB[cursor++];
 	    }
 	}
-	std::cout << "[INFO] level had been built." << std::endl;
+	
+	for (int y = 0; y < height; ++y) {
+	    for (int x = 0; x < width; ++x) {
+		// std::cout << "R :: " << matrix[y][x][0] << std::endl; yeah;
+		// std::cout << "G :: " << matrix[y][x][1] << std::endl; yeah;
+		// std::cout << "B :: " << matrix[y][x][2] << std::endl; yeah;
+		if (matrix[y][x][0] == 0 && matrix[y][x][1] == 0 && matrix[y][x][2] == 255) {
+		    Objects::Rectangle *block = new Objects::Rectangle("block", false);
+	
+		    block->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+		    block->self.color = glm::vec3(42.0f, 93.0f, 232.0f);
+		    block->self.scale = glm::vec2(3.0f, 3.0f);
+		
+		    block->self.position = glm::vec3((x * block->self.scale.x) * -1, (y * block->self.scale.y) * -1, 0.0f);
+		    level.push_back(block);
+		}
+	    }
+	}
+	std::cout << "[INFO] level had been built.";
 	return;
     }
     void Application::renderLevel(Shader *p_shader) {
 	for (int i = 0; i < (int)level.size(); i++) {
 	    level[i]->render(p_shader);
+	}
+	return;
+    }
+    void Application::destroyLevel() {
+	for (int i = 0; i < (int)level.size(); i++) {
+	    delete level[i];
 	}
 	return;
     }

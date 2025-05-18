@@ -8,6 +8,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include "./objects.hpp"
 #include "./molson.h"
 
 enum KEYCODES {
@@ -69,6 +70,7 @@ namespace Core {
 	    bool isKeyJustPressed(int p_key);
 	    bool isRunning();
 	    
+	    std::vector<Objects::Rectangle*> &getLevel();
 	    void buildLevel(std::string p_level_path);
 	    void renderLevel(Shader *p_shader);
 	    void destroyLevel();

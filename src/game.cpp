@@ -19,37 +19,26 @@
 namespace Game {
     
     Core::Application *engine;
+    std::vector<Objects::Rectangle*> level;
+    
     void setApplication(Core::Application *p_engine) {
 	engine = p_engine;
 	return;
     }
     
     Objects::Rectangle *player;
-    Objects::Rectangle *ground;
-    Objects::Rectangle *wall;
     
     void ready() {
 	engine->buildLevel("./assets/test-level.png");
+	level = engine->getLevel();
 	
 	player = new Objects::Rectangle("Player", false);
-	ground = new Objects::Rectangle("Ground", false);
-	wall   = new Objects::Rectangle("Wall", false);
 	
 	// TODO: hardcoded.
 	player->self.position = glm::vec3(-2.0f, -2.0f, 0.0f);
 	player->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	player->self.color = glm::vec3(240.0f, 58.0f, 46.0f);
 	player->self.scale = glm::vec2(3.0f, 3.0f);
-	
-	ground->self.position = glm::vec3(0.0f - *engine->getWindowHeight() / 2, -10.0f, 0.0f);
-	ground->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	ground->self.color = glm::vec3(42.0f, 93.0f, 232.0f);
-	ground->self.scale = glm::vec2(*engine->getWindowHeight(), 3.0f);
-	
-	wall->self.position = glm::vec3(8.0f, -8.0f, 0.0f);
-	wall->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	wall->self.color = glm::vec3(42.0f, 93.0f, 232.0f);
-	wall->self.scale = glm::vec2(3.0f, *engine->getWindowWidth());
 	return;
     }
     
@@ -59,8 +48,8 @@ namespace Game {
     const float FRICTION = 0.07f;
     const float SPEED = 0.26f;
     
-    const float NORMAL_GRAVITY = 0.008f;
-    const float WALL_GRAVITY = 0.0008f;
+    const float NORMAL_GRAVITY = 0.0008f;
+    const float WALL_GRAVITY = 0.00008f;
     
     float GRAVITY = NORMAL_GRAVITY;
     
@@ -89,28 +78,31 @@ namespace Game {
 	}
 	forecast_player.self.position.x += forecast_velocity * delta;
 	// found out this method. It works, but for sure has problems. That's the X-axis move and collide system.
-	if (Physics::isColliding(&forecast_player, wall)) {
-	    if (velocity.x > 0.0f) {
-		player->self.position.x = wall->self.position.x - wall->self.scale.x;
-		velocity.x = 0.0f;
-		
-		// wall jump;
-		if (!Physics::isRectOnFloor(player, ground)) {
-		    velocity.y = 0.0f;
-		    GRAVITY = WALL_GRAVITY;
-		    velocity.y -= GRAVITY * delta;
-		    if (jump_number == MAX_JUMP_QUANTITY) {
-			jump_number = 2;
+	for (int i = 0; i < (int)level.size(); i++) {
+	    if (Physics::isColliding(&forecast_player, level[i] )) {
+		if (velocity.x > 0.0f) {
+		    player->self.position.x = level[i]->self.position.x - level[i]->self.scale.x;
+		    velocity.x = 0.0f;
+		    
+		    // wall jump;
+		    if (!Physics::isRectOnFloor(player, level[i])) {
+			velocity.y = 0.0f;
+			GRAVITY = WALL_GRAVITY;
+			velocity.y -= GRAVITY * delta;
+			if (jump_number == MAX_JUMP_QUANTITY) {
+			    jump_number = 2;
+			}
+			return;
 		    }
-		    return;
+		} else if (velocity.x < 0.0f) {
+		    player->self.position.x = level[i]->self.position.x + level[i]->self.scale.x;
+		    velocity.x = 0.0f;
 		}
-	    } else if (velocity.x < 0.0f) {
-		player->self.position.x = wall->self.position.x + wall->self.scale.x;
-		velocity.x = 0.0f;
+		return;
+	    } else {
+		if (GRAVITY == NORMAL_GRAVITY) break;
+		GRAVITY = NORMAL_GRAVITY;
 	    }
-	    return;
-	} else {
-	    GRAVITY = NORMAL_GRAVITY;
 	}
 	velocity.x = forecast_velocity;
 	return;
@@ -122,14 +114,16 @@ namespace Game {
 	player->self.position.y += velocity.y;
 	
 	// this reminds me of the game maker times...
-	if (!Physics::isRectOnFloor(player, ground)){
-	    velocity.y -= GRAVITY * delta;
-	} else {
-	    jump_number = 1;
-	    
-	    player->self.position.y = ground->self.position.y + ground->self.scale.y;
-	    velocity.y = 0.0f;
-	    return;
+	for (int i = 0; i < (int)level.size(); i++) {
+	    if (!Physics::isRectOnFloor(player, level[i])) {
+		velocity.y -= GRAVITY * delta;
+	    } else {
+		jump_number = 1;
+		
+		player->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
+		velocity.y = 0.0f;
+		return;
+	    }
 	}
 	return;
     }
@@ -146,16 +140,11 @@ namespace Game {
     
     void render() {
 	engine->renderLevel(engine->getMainShader());
-	
 	player->render(engine->getMainShader());
-	player->render(engine->getMainShader());
-	ground->render(engine->getMainShader());
-	wall->render(engine->getMainShader());
     }
     
     void destroy() {
+	engine->destroyLevel();
 	delete player;
-	delete ground;
-	delete wall;
     }
 }

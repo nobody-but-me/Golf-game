@@ -48,13 +48,6 @@ void Molson(_set_int)(const char *_name, int _value, bool _use_shader, Shader *_
 
 // --------------------------------------------------
 
-#include <vector>
-typedef struct {
-    std::vector<std::vector<int>> RGBs;
-    std::vector<glm::vec2> position;
-} Pixels;
-Pixels Molson(getImageRGBValues)(std::string p_filepath);
-
 #endif//MOLSON_H
 #ifdef MOLSON_IMPLEMENTATION
 
@@ -338,36 +331,22 @@ void Molson(_set_bool)(const char *_name, bool _value, Shader *_shader) {
 // --------------------------------------------------
 
 #include <vector>
-Pixels Molson(getImageRGBValues)(std::string p_filepath) {
-    Pixels d;
-    
+std::vector<std::vector<unsigned int>> Molson(readRGBImage)(std::string p_filepath) {
     int width, height, channels;
     unsigned char *data = stbi_load(p_filepath.c_str(), &width, &height, &channels, 3);
     
-    const int RGB_SIZE = width * height;
+    // const unsigned int RGB_SIZE = width * height;
+    std::vector<std::vector<unsigned int>> d;
     if (data != nullptr && width > 0 && height > 0) {
-	printf("[MOLSON]: %d. \n", RGB_SIZE);
-	int x, y = 0;
-	for (int i = 0; i < RGB_SIZE;) {
-	    std::vector<int> rgb;
+	for (unsigned int i = 0; i < (unsigned int)(width * height); i++) {
+	    std::vector<unsigned int> rgb;
 	    rgb.push_back(data[i * 3]);
 	    rgb.push_back(data[i * 3 + 1]);
 	    rgb.push_back(data[i * 3 + 2]);
-	    
-	    d.position.push_back(glm::vec2(x, y));
-	    if (x < width) x++;
-	    else {
-		x = 0;
-		y--;
-	    }
-	    printf("[MOLSON]: x: %d, y: %d; \n", x, y); // printing again
-	    
-	    d.RGBs.push_back(rgb);
-	    // printf("[MOLSON]: R: %d; G: %d; B: %d; \n", data[i], data[i + 1], data[i + 2]); // printing
-	    i++;
+	    d.push_back(rgb);
 	}
-	// printf("[MOLSON]: %ld. \n", d.RGBs.size());
-	// [[85, 87, 86], [255, 0, 255]] <- array reference
+	//     printf("[MOLSON]: x: %d, y: %d; \n", x, y); // printing again
+	//     // printf("[MOLSON]: R: %d; G: %d; B: %d; \n", data[i], data[i + 1], data[i + 2]); // printing
 	stbi_image_free(data);
 	return d;
     }
