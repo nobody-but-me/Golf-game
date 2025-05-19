@@ -21,7 +21,7 @@ namespace Physics {
     
     bool isRectOnFloor(Objects::Rectangle *rect1, Objects::Rectangle *rect2) {
 	if (isColliding(rect1, rect2)) {
-	    return (rect1->self.position.y - rect1->self.scale.y <= rect2->self.position.y + rect2->self.scale.y);
+	    return (rect1->self.position.y <= rect2->self.position.y + rect2->self.scale.y);
 	}
 	return false;
     }

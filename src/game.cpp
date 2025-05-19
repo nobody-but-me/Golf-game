@@ -103,16 +103,21 @@ namespace Game {
 	    if (level[i]->name == "block") {
 		if (!Physics::isRectOnFloor(player, level[i])) {
 		    velocity.y -= GRAVITY;
-		} else {
+		} else if (Physics::isRectOnFloor(player, level[i]) == true) {
+		    // TODO: bad way to do that
+		    bool ground = false;
 		    if (velocity.y > 0.0f) {
 			player->self.position.y = level[i]->self.position.y - level[i]->self.scale.y;
 		    } else if (velocity.y < 0.0f) {
 			player->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
+			ground = true;
 		    }
 		    velocity.y = 0.0f;
 		    
-		    if (engine->isKeyPressed(GOLF_UP)) {
-			velocity.y = JUMP_FORCE;
+		    if (ground) {
+			if (engine->isKeyPressed(GOLF_UP)) {
+			    velocity.y = JUMP_FORCE;
+			}
 		    }
 		    return;
 		}
