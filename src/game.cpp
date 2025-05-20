@@ -26,25 +26,25 @@ namespace Game {
 	return;
     }
     
-    Objects::Rectangle *player;
+    Objects::Sprite *player;
     
     void ready() {
 	engine->buildLevel("./assets/test-level.png");
 	level = engine->getLevel();
 	
-	player = new Objects::Rectangle("Player", false);
+	player = new Objects::Sprite("Player", "./assets/m.png", true, false);
 	
 	// TODO: hardcoded.
 	player->self.position = glm::vec3(-2.0f, -2.0f, 0.0f);
-	player->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	player->self.color = glm::vec3(240.0f, 58.0f, 46.0f);
-	player->self.scale = glm::vec2(3.0f, 3.0f);
+	player->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	player->self.scale = glm::vec2(3.0f, 6.0f);
 	return;
     }
     
     const float ACCELERATION = 0.2f;
     const int MAX_JUMP_QUANTITY = 3;
-    const float JUMP_FORCE = 35.0f;
+    const float JUMP_FORCE = 40.0f;
     const float FRICTION = 0.07f;
     const float SPEED = 30.0f;
     
@@ -76,9 +76,9 @@ namespace Game {
 	// found out this method. It works, but for sure has problems. That's the X-axis move and collide system.
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (Physics::isColliding(&forecast_player, level[i] )) {
+		if (Physics::isColliding(&forecast_player.self, &level[i]->self )) {
 		    if (velocity.x > 0.0f) {
-			player->self.position.x = level[i]->self.position.x - level[i]->self.scale.x;
+			player->self.position.x = level[i]->self.position.x - player->self.scale.x;
 			velocity.x = 0.0f;
 			
 		    } else if (velocity.x < 0.0f) {
@@ -101,13 +101,13 @@ namespace Game {
 	// this reminds me of the game maker times...
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (!Physics::isRectOnFloor(player, level[i])) {
+		if (!Physics::isOnFloor(&player->self, &level[i]->self)) {
 		    velocity.y -= GRAVITY;
-		} else if (Physics::isRectOnFloor(player, level[i]) == true) {
+		} else if (Physics::isOnFloor(&player->self, &level[i]->self) == true) {
 		    // TODO: bad way to do that
 		    bool ground = false;
-		    if (velocity.y > 0.0f) {
-			player->self.position.y = level[i]->self.position.y - level[i]->self.scale.y;
+		    if (velocity.y > 0.0f) { // collision ceiling
+			player->self.position.y = level[i]->self.position.y - player->self.scale.y;
 		    } else if (velocity.y < 0.0f) {
 			player->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
 			ground = true;
