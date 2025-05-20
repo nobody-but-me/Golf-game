@@ -3,7 +3,4 @@
 	url = https://github.com/g-truc/glm.git
 [submodule "lib/imgui"]
 	path = lib/imgui
-	url = https://github.com/ocornut/imgui/tree/master
-[submodule "imgui"]
-	path = imgui
 	url = https://github.com/ocornut/imgui.git
