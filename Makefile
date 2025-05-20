@@ -1,12 +1,12 @@
 
-INCLUDE := -I./include/ -I./lib/ -I./lib/glm/
-CFLAGS := -lglfw -ldl -Werror -Wall -pedantic -Wno-unused-but-set-variable
+INCLUDE := -I./include/ -I./lib/ -I./lib/glm/ -I./lib/imgui/
+CFLAGS := -Wl,--copy-dt-needed-entries -lglfw -lglut -ldl -Werror -Wall -pedantic -Wno-unused-but-set-variable
 CC := g++
 
 SRC_PATH := ./src
 
 TARGET := ./build/Golf
-SRCS := $(wildcard $(SRC_PATH)/*.cpp)
+SRCS := $(wildcard $(SRC_PATH)/*.cpp ./lib/imgui/*.cpp ./lib/imgui/backends/*.cpp)
 OBJS := ./objs/golf.o
 
 run: $(TARGET)
