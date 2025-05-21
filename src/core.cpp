@@ -17,6 +17,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
 
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
+#include <imgui.h>
+
 namespace Core {
     
     const int *Application::getWindowHeight() {
@@ -63,26 +67,26 @@ namespace Core {
 	// Decide GL+GLSL versions
 	#if defined(IMGUI_IMPL_OPENGL_ES2)
 	// GL ES 2.0 + GLSL 100 (WebGL 1.0)
-	// const char* glsl_version = "#version 100";
+	const char* glsl_version = "#version 100";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 	#elif defined(IMGUI_IMPL_OPENGL_ES3)
 	// GL ES 3.0 + GLSL 300 es (WebGL 2.0)
-	// const char* glsl_version = "#version 300 es";
+	const char* glsl_version = "#version 300 es";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 	#elif defined(__APPLE__)
 	// GL 3.2 + GLSL 150
-	// const char* glsl_version = "#version 150";
+	const char* glsl_version = "#version 150";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
 	#else
 	// GL 3.0 + GLSL 130
-	// const char* glsl_version = "#version 130";
+	const char* glsl_version = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
@@ -104,6 +108,13 @@ namespace Core {
 	glfwSetFramebufferSizeCallback(window, window_resized_callback);
 	glEnable(GL_DEPTH_TEST);
 	
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	// ImGuiIO &io = ImGui::GetIO();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
+	ImGui::StyleColorsDark();
+	
 	Molson(_init_shader)("./shaders/object.vert", "./shaders/object.frag", &main_shader);
 	
 	glm::mat4 projection = glm::mat4(1.0f);
@@ -123,13 +134,29 @@ namespace Core {
     Application::~Application() {
 	running = false;
 	
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
+	
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	std::cout << "\n[INFO]: Application destroyed. \n" << std::endl;
 	return;
-
     }
     
+    void Application::editorRender() {
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+	
+	ImGui::Begin("Hello Window");
+	ImGui::Button("Hello!");
+	ImGui::End();
+	
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	return;
+    }
     
     std::vector<Objects::Rectangle*> level;
     

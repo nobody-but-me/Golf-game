@@ -75,6 +75,8 @@ namespace Core {
 	    void renderLevel(Shader *p_shader);
 	    void destroyLevel();
 	    
+	    void editorRender();
+	    
 	    Application(std::string p_title);
 	    ~Application();
 	    
