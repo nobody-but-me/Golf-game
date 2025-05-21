@@ -59,6 +59,11 @@ namespace Core {
 	glViewport(0, 0, w, h);
 	return;
     }
+    
+    // VIEW VARIABLES
+    static glm::mat4 projection = glm::mat4(1.0f);
+    static glm::mat4 view = glm::mat4(1.0f);
+    
     Application::Application(std::string p_title) {
 	if (!glfwInit()) {
 	    std::cout << "[FAILED]: OpenGL library could not be loaded. \n" << std::endl;
@@ -117,8 +122,8 @@ namespace Core {
 	
 	Molson(_init_shader)("./shaders/object.vert", "./shaders/object.frag", &main_shader);
 	
-	glm::mat4 projection = glm::mat4(1.0f);
-	glm::mat4 view = glm::mat4(1.0f);
+	// glm::mat4 projection = glm::mat4(1.0f);
+	// glm::mat4 view = glm::mat4(1.0f);
 	view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -50.0f));
 	projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 	// projection = glm::ortho(0.0f, (float)WIDTH, (float)HEIGHT, 0.0f, -1.0f, 1.0f);
@@ -144,19 +149,28 @@ namespace Core {
 	return;
     }
     
+    static glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
+    static glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 1.0f);
+    static float camera_position[] = {0.0f, 0.0f, 50.0f};
     void Application::editorRender() {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	
-	ImGui::Begin("Hello Window");
-	ImGui::Button("Hello!");
+	ImGui::Begin("Camera");
+	
+	ImGui::SliderFloat3("Position", camera_position, -90.0f, 90.0f);
+	view = glm::lookAt(glm::vec3(camera_position[0], camera_position[1], camera_position[2]), glm::vec3(camera_position[0], camera_position[1], camera_position[2]) + camera_front, camera_up);
+	Molson(_set_matrix4)("view", &view, true, &main_shader);
+	
 	ImGui::End();
 	
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	return;
     }
+    
+    // --------------------------------------------------
     
     std::vector<Objects::Rectangle*> level;
     
