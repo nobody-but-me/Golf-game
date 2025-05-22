@@ -43,7 +43,7 @@ namespace Game {
 	
 	// TODO: i don't know, it seems ugly and hardcoded.
 	player_hitbox->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 25.0f);
+	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 0.0f);
 	player->self.position = glm::vec3(-2.0f, -2.0f, -5.0f);
 	player_hitbox->self.scale = glm::vec2(3.0f, 6.0f);
 	
@@ -66,9 +66,11 @@ namespace Game {
     static void move(double delta) {
 	float direction = 0.0f;
 	if (engine->isKeyPressed(GOLF_D)) {
+	    player->self.rotation.y = 0.0f;
 	    direction = 1.0f;
 	}
 	else if (engine->isKeyPressed(GOLF_A)) {
+	    player->self.rotation.y = 180.0f;
 	    direction = -1.0f;
 	}
 	
