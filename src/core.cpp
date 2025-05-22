@@ -10,6 +10,7 @@
 #include "../include/objects.hpp"
 #include "../include/stb_image.h"
 #include "../include/core.hpp"
+#include "../include/game.hpp"
 #define MOLSON_IMPLEMENTATION
 #include "../include/molson.h"
 
@@ -112,6 +113,8 @@ namespace Core {
 	}
 	glfwSetFramebufferSizeCallback(window, window_resized_callback);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -149,6 +152,8 @@ namespace Core {
 	return;
     }
     
+
+    // -- EDITOR --
     static glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
     static glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 1.0f);
     static float camera_position[] = {0.0f, 0.0f, 50.0f};
@@ -162,6 +167,14 @@ namespace Core {
 	ImGui::SliderFloat3("Position", camera_position, -90.0f, 90.0f);
 	view = glm::lookAt(glm::vec3(camera_position[0], camera_position[1], camera_position[2]), glm::vec3(camera_position[0], camera_position[1], camera_position[2]) + camera_front, camera_up);
 	Molson(_set_matrix4)("view", &view, true, &main_shader);
+	
+	ImGui::End();
+	
+	ImGui::Begin("Player");
+	
+	ImGui::SliderFloat("Position X", &Game::getPlayerHitbox()->self.position.x, -200.0f, 200.0f);
+	ImGui::SliderFloat("Position Y", &Game::getPlayerHitbox()->self.position.y, -200.0f, 200.0f);
+	ImGui::SliderFloat("Position Z", &Game::getPlayerHitbox()->self.position.z, -200.0f, 200.0f);
 	
 	ImGui::End();
 	
@@ -214,7 +227,7 @@ namespace Core {
 		    Objects::Rectangle *block = new Objects::Rectangle("block", false);
 		    
 		    block->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-		    block->self.color = glm::vec3(42.0f, 93.0f, 232.0f);
+		    block->self.color = glm::vec4(42.0f, 93.0f, 232.0f, 255.0f);
 		    block->self.scale = glm::vec2(3.0f, 3.0f);
 		    
 		    block->self.position = glm::vec3((x * block->self.scale.x) - width / 2, ((y * block->self.scale.y) * -1) + height / 2, 0.0f);
@@ -224,7 +237,7 @@ namespace Core {
 		    Objects::Rectangle *block = new Objects::Rectangle("idk", false);
 		    
 		    block->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-		    block->self.color = glm::vec3(255.0f, 0.0f, 0.0f);
+		    block->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 255.0f);
 		    block->self.scale = glm::vec2(3.0f, 3.0f);
 		    
 		    block->self.position = glm::vec3((x * block->self.scale.x) - width / 2, ((y * block->self.scale.y) * -1) + height / 2, 0.0f);
@@ -232,7 +245,7 @@ namespace Core {
 		}
 	    }
 	}
-	std::cout << "[INFO] level had been built.";
+	std::cout << "[INFO] level had been built. \n";
 	return;
     }
     

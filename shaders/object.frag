@@ -5,14 +5,14 @@ in vec2 texture_coords;
 out vec4 object_color;
 
 uniform sampler2D object_image;
-uniform vec3 color;
 uniform bool is_textured;
+uniform vec4 color;
 
 void main() {
      if (is_textured) {
-     	object_color = vec4(color, 1.0f) * texture(object_image, texture_coords);
+     	object_color = color * texture(object_image, texture_coords);
      }
      else {
-     	object_color = vec4(color, 1.0f);
+     	object_color = color;
      }
 }

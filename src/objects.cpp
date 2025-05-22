@@ -51,6 +51,7 @@ namespace Objects {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	
+	texture_alpha = p_alpha;
 	if (p_texture_path != "") {
 	    texture_path = p_texture_path;
 	    texture = Molson(_load_texture)(texture_path.c_str(), p_alpha);
@@ -85,13 +86,14 @@ namespace Objects {
 	transform = glm::scale(transform, glm::vec3(self.scale, 1.0f));
 	
 	Molson(_set_matrix4)("transform", &transform, false, p_shader);
-	Molson(_set_vector3_f)("color", self.color / 255.0f, false, p_shader);
+	Molson(_set_vector4_f)("color", self.color / 255.0f, false, p_shader);
 	Molson(_set_bool)("is_textured", true, p_shader);
 	
 	if (texture_path != "") {
 	    glActiveTexture(GL_TEXTURE0);
 	    glBindTexture(GL_TEXTURE_2D, texture.id);
 	}
+	// if (texture_alpha) glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glBindVertexArray(self.vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -162,7 +164,7 @@ namespace Objects {
 	transform = glm::scale(transform, glm::vec3(self.scale, 1.0f));
 	
 	Molson(_set_matrix4)("transform", &transform, false, p_shader);
-	Molson(_set_vector3_f)("color", self.color / 255.0f, false, p_shader);
+	Molson(_set_vector4_f)("color", self.color / 255.0f, false, p_shader);
 	Molson(_set_bool)("is_textured", false, p_shader);
 	
 	glBindVertexArray(self.vao);

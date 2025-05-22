@@ -21,7 +21,7 @@ namespace Objects {
 	glm::vec3 rotation;
 	glm::vec2 scale;
 	
-	glm::vec3 color;
+	glm::vec4 color;
     } Object;
     
     class Rectangle;

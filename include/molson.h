@@ -42,8 +42,9 @@ void Molson(_destroy)(Shader *_shader);
 void Molson(_use)(Shader *_shader);
 
 void Molson(_set_matrix4)(const char *_name, const glm::mat4 *_value, bool _use_shader, Shader *_shader);
-void Molson(_set_vector3_f)(const char *_name, glm::vec3 _value, bool _use_shader, Shader *_shader);
 void Molson(_set_vector2_f)(const char *_name, glm::vec2 _value, bool _use_shader, Shader *_shader);
+void Molson(_set_vector3_f)(const char *_name, glm::vec3 _value, bool _use_shader, Shader *_shader);
+void Molson(_set_vector4_f)(const char *_name, glm::vec4 _value, bool _use_shader, Shader *_shader);
 void Molson(_set_int)(const char *_name, int _value, bool _use_shader, Shader *_shader);
 
 // --------------------------------------------------
@@ -308,11 +309,11 @@ void Molson(_set_vector3_f)(const char *_name, glm::vec3 _value, bool _use_shade
     glUniform3f(glGetUniformLocation(_shader->ID, _name), _value[0], _value[1], _value[2]);
     return;
 }
-void Molson(_set_vector3_f)(const char *_name, glm::vec2 _value, bool _use_shader, Shader *_shader) {
+void Molson(_set_vector4_f)(const char *_name, glm::vec4 _value, bool _use_shader, Shader *_shader) {
     if (_use_shader) {
 	glUseProgram(_shader->ID);
     }
-    glUniform2f(glGetUniformLocation(_shader->ID, _name), _value[0], _value[1]);
+    glUniform4f(glGetUniformLocation(_shader->ID, _name), _value[0], _value[1], _value[2], _value[3]);
     return;
 }
 

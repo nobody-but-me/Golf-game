@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include <glm/vec4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 
@@ -26,19 +27,29 @@ namespace Game {
 	return;
     }
     
+    Objects::Rectangle *player_hitbox;
     Objects::Sprite *player;
+    
+    Objects::Rectangle *getPlayerHitbox() {
+	return player_hitbox;
+    }
     
     void ready() {
 	engine->buildLevel("./assets/test-level.png");
 	level = engine->getLevel();
 	
-	player = new Objects::Sprite("Player", "./assets/m.png", true, false);
+	player = new Objects::Sprite("Player", "./assets/player/frames/frame0000.png", true, false);
+	player_hitbox = new Objects::Rectangle("Player", false);
 	
-	// TODO: hardcoded.
-	player->self.position = glm::vec3(-2.0f, -2.0f, 0.0f);
-	player->self.color = glm::vec3(240.0f, 58.0f, 46.0f);
+	// TODO: i don't know, it seems ugly and hardcoded.
+	player_hitbox->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 25.0f);
+	player->self.position = glm::vec3(-2.0f, -2.0f, -5.0f);
+	player_hitbox->self.scale = glm::vec2(3.0f, 6.0f);
+	
 	player->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	player->self.scale = glm::vec2(3.0f, 6.0f);
+	player->self.color = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
+	player->self.scale = glm::vec2(8.5f, 8.5f);
 	return;
     }
     
@@ -63,8 +74,8 @@ namespace Game {
 	
 	// TODO: find a better and more precise way to do that.
 	Objects::Rectangle forecast_player("forecastPlayer", false);
-	forecast_player.self.position = player->self.position;
-	forecast_player.self.scale = player->self.scale;
+	forecast_player.self.position = player_hitbox->self.position;
+	forecast_player.self.scale = player_hitbox->self.scale;
 	float forecast_velocity;
 	
 	if (direction == 1.0f || direction == -1.0f) {
@@ -78,11 +89,11 @@ namespace Game {
 	    if (level[i]->name == "block") {
 		if (Physics::isColliding(&forecast_player.self, &level[i]->self )) {
 		    if (velocity.x > 0.0f) {
-			player->self.position.x = level[i]->self.position.x - player->self.scale.x;
+			player_hitbox->self.position.x = level[i]->self.position.x - player_hitbox->self.scale.x;
 			velocity.x = 0.0f;
 			
 		    } else if (velocity.x < 0.0f) {
-			player->self.position.x = level[i]->self.position.x + level[i]->self.scale.x;
+			player_hitbox->self.position.x = level[i]->self.position.x + level[i]->self.scale.x;
 			velocity.x = 0.0f;
 		    }
 		    return;
@@ -94,22 +105,23 @@ namespace Game {
     }
     
     void process(double delta) {
+	player->self.position = glm::vec3(player_hitbox->self.position.x - 2.5f, player_hitbox->self.position.y - 1.1f, player_hitbox->self.position.z + 0.5f);
 	move(delta);
-	player->self.position.x += velocity.x * delta;
-	player->self.position.y += velocity.y * delta;
+	player_hitbox->self.position.x += velocity.x * delta;
+	player_hitbox->self.position.y += velocity.y * delta;
 	
 	// this reminds me of the game maker times...
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (!Physics::isOnFloor(&player->self, &level[i]->self)) {
+		if (!Physics::isOnFloor(&player_hitbox->self, &level[i]->self)) {
 		    velocity.y -= GRAVITY;
-		} else if (Physics::isOnFloor(&player->self, &level[i]->self) == true) {
+		} else if (Physics::isOnFloor(&player_hitbox->self, &level[i]->self) == true) {
 		    // TODO: bad way to do that
 		    bool ground = false;
 		    if (velocity.y > 0.0f) { // collision ceiling
-			player->self.position.y = level[i]->self.position.y - player->self.scale.y;
+			player_hitbox->self.position.y = level[i]->self.position.y - player_hitbox->self.scale.y;
 		    } else if (velocity.y < 0.0f) {
-			player->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
+			player_hitbox->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
 			ground = true;
 		    }
 		    velocity.y = 0.0f;
@@ -132,11 +144,14 @@ namespace Game {
     
     void render() {
 	engine->renderLevel(engine->getMainShader());
+	
+	player_hitbox->render(engine->getMainShader());
 	player->render(engine->getMainShader());
     }
     
     void destroy() {
 	engine->destroyLevel();
+	delete player_hitbox;
 	delete player;
     }
 }
