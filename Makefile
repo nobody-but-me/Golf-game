@@ -9,7 +9,7 @@ TARGET := ./build/Golf
 SRCS := $(wildcard $(SRC_PATH)/*.cpp ./lib/imgui/*.cpp ./lib/imgui/backends/*.cpp)
 OBJS := ./objs/golf.o
 
-run: $(TARGET)
+exec: $(TARGET)
 	$(TARGET)
 	rm -rf ./*.o
 
@@ -25,7 +25,9 @@ $(OBJS): ./objs
 ./build:
 	mkdir -p ./build
 
-.PHONY: clean
+.PHONY: clean run
 clean:
 	rm -rf ./build ./objs
 	rm -rf ./*.o
+run:
+	$(TARGET)
