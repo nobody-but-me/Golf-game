@@ -38,7 +38,7 @@ namespace Game {
 	engine->buildLevel("./assets/test-level.png");
 	level = engine->getLevel();
 	
-	player = new Objects::Sprite("Player", "./assets/player/frames/frame0000.png", true, false);
+	player = new Objects::Sprite("Player", "./assets/player/sprite_sheet.png", true, false);
 	player_hitbox = new Objects::Rectangle("Player", false);
 	
 	// TODO: i don't know, it seems ugly and hardcoded.

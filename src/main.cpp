@@ -12,8 +12,6 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
-#define TAU (3.1415 * 2.0)
-
 int main(int argc, char *argv[]) {
     Core::Application engine("Golfine << DEBUG");
     Game::setApplication(&engine);

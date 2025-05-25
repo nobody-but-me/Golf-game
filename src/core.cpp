@@ -130,7 +130,7 @@ namespace Core {
 	view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -50.0f));
 	projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 	// projection = glm::ortho(0.0f, (float)WIDTH, (float)HEIGHT, 0.0f, -1.0f, 1.0f);
-
+	
 	Molson(_set_matrix4)("projection", &projection, true, &main_shader);
 	Molson(_set_matrix4)("view", &view, true, &main_shader);
 	Molson(_set_int)("object_image", 0, true, &main_shader);
@@ -161,6 +161,9 @@ namespace Core {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+	
+	// just for test purposes.
+	// Molson(_set_int)("time", static_cast<int>(glfwGetTime()), true, &main_shader);
 	
 	ImGui::Begin("Camera");
 	
