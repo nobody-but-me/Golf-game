@@ -22,7 +22,7 @@ void main() {
      	// object_color = color * texture(object_image, texture_coords);
 	// object_color = color * texture(object_image, vec2((texture_coords.x / SPRITE_COLUMNS) + pos.x * (1.0 / SPRITE_COLUMNS), (texture_coords.y / SPRITE_ROWS) + pos.y * (1.0 / SPRITE_ROWS)));
 	
-	object_color = color * texture(object_image, vec2((texture_coords.x / SPRITE_COLUMNS) + pos.x * (1.0 / SPRITE_COLUMNS), (texture_coords.y / SPRITE_ROWS) + pos.y * (1.0 / SPRITE_ROWS)));
+        object_color = color * texture(object_image, vec2((texture_coords.x / SPRITE_COLUMNS) + pos.x * (1.0 / SPRITE_COLUMNS), (texture_coords.y / SPRITE_ROWS) + pos.y * (1.0 / SPRITE_ROWS)));
 	
      }
      else {

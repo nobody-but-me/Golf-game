@@ -29,13 +29,14 @@ namespace Editor {
 
 #include "./game.hpp"
 #include "./core.hpp"
-
+#include "./molson.h"
 
 namespace Editor {
 
     static glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
     static glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 1.0f);
     static float camera_position[] = {0.0f, 0.0f, 50.0f};
+    static int sprite_index = 0;
     Core::Application *engine;
     glm::mat4 view;
 
@@ -62,7 +63,10 @@ namespace Editor {
 	    ImGui::SliderFloat("Position Y", &Game::getPlayerHitbox()->self.position.y, -200.0f, 200.0f);
 	    ImGui::SliderFloat("Position Z", &Game::getPlayerHitbox()->self.position.z, -200.0f, 200.0f);
 
+	    ImGui::SliderInt("Sprite Index", &sprite_index, 0, 35);
+
 	    ImGui::End();
+	    Molson(_set_int)("time", sprite_index, true, engine->getMainShader());
 
 	    ImGui::Render();
 	    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -14,7 +14,9 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
-static int sprite_index = 0;
+
+// static int sprite_index_delay = 0;
+// static int sprite_index = 0;
 
 int main(int argc, char *argv[]) {
     Core::Application engine("Golfine << DEBUG");
@@ -44,12 +46,18 @@ int main(int argc, char *argv[]) {
     Editor::process(delta);
 
     // ---------------for purposes of test---------------
-	if (sprite_index < 35) {
-	    sprite_index++;
-	} else {
-	    sprite_index = 0;
-	}
-	Molson(_set_int)("time", sprite_index, true, engine.getMainShader());
+    // if (sprite_index_delay < 5) {
+    //     sprite_index_delay++;
+    // } else {
+	//     if (sprite_index < 35) {
+    //         std::cout << sprite_index << std::endl;
+	//         sprite_index++;
+	//     } else {
+	//         sprite_index = 0;
+	//     }
+    //     sprite_index_delay = 0;
+    // }
+	// Molson(_set_int)("time", sprite_index, true, engine.getMainShader());
 	// --------------------------------------------------
 
 	glfwSwapBuffers(engine.getWindow());
