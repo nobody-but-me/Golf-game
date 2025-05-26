@@ -8,9 +8,6 @@
 
 #include <GLFW/glfw3.h>
 
-#include "./objects.hpp"
-#include "./molson.h"
-
 enum KEYCODES {
     GOLF_ESCAPE = GLFW_KEY_ESCAPE,
     GOLF_SPACE  = GLFW_KEY_SPACE,
@@ -49,40 +46,45 @@ enum KEYCODES {
     GOLF_Z = GLFW_KEY_Z
 };
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
+
+#include "./objects.hpp"
+#include "./molson.h"
+
 namespace Core {
     
     class Application {
-	private:
-	    const int HEIGHT = 600;
-	    const int WIDTH  = 800;
-	    
-	    bool running = false;
-	    GLFWwindow *window;
-	    Shader main_shader;
-	    
-	public:
-	    const int *getWindowHeight();
-	    const int *getWindowWidth();
-	    Shader *getMainShader();
-	    GLFWwindow *getWindow();
-	    
-	    bool isKeyPressed(int p_key);
-	    bool isKeyJustPressed(int p_key);
-	    bool isRunning();
-	    
-	    std::vector<Objects::Rectangle*> &getLevel();
-	    void buildLevel(std::string p_level_path);
-	    void renderLevel(Shader *p_shader);
-	    void destroyLevel();
-	    
-	    void editorRender();
-	    
-	    Application(std::string p_title);
-	    ~Application();
-	    
-    };
-    
-}
+	    private:
+	        const int HEIGHT = 600;
+	        const int WIDTH  = 800;
 
-#endif//CORE_H
+	        bool running = false;
+	        GLFWwindow *window;
+	        Shader main_shader;
 
+	    public:
+	        const int  *getWindowHeight();
+	        const int  *getWindowWidth();
+	        Shader     *getMainShader();
+	        GLFWwindow *getWindow();
+            glm::mat4  *getView();
+
+	        bool isKeyPressed(int p_key);
+	        bool isKeyJustPressed(int p_key);
+	        bool isRunning();
+
+	        std::vector<Objects::Rectangle*> &getLevel();
+	        void buildLevel(std::string p_level_path);
+	        void renderLevel(Shader *p_shader);
+	        void destroyLevel();
+
+	        Application(std::string p_title);
+	        ~Application();
+
+        };
+
+    }
+
+    #endif//CORE_H

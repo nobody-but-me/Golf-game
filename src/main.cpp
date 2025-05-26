@@ -4,16 +4,22 @@
 #include "../include/glad.h"
 #include <GLFW/glfw3.h>
 
-#include "../include/game.hpp"
 #include "../include/core.hpp"
+
+#include "../include/editor.hpp"
+#include "../include/game.hpp"
 #include "../include/molson.h"
 
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
+static int sprite_index = 0;
+
 int main(int argc, char *argv[]) {
     Core::Application engine("Golfine << DEBUG");
+
+    Editor::setApplication(&engine);
     Game::setApplication(&engine);
     
     // TODO: change the place of this delta time logic.
@@ -22,7 +28,6 @@ int main(int argc, char *argv[]) {
     
     glfwSetKeyCallback(engine.getWindow(), Game::input);
     Game::ready();
-    // Molson(getImageRGBValues)("./assets/color-image-test.png");
     while (!glfwWindowShouldClose(engine.getWindow())) {
 	if (engine.isKeyPressed(GOLF_ESCAPE)) {
 	    break;
@@ -35,10 +40,18 @@ int main(int argc, char *argv[]) {
 	last_time = glfwGetTime();
 	
 	Game::process(delta);
-	
 	Game::render();
-	engine.editorRender();
-	
+    Editor::process(delta);
+
+    // ---------------for purposes of test---------------
+	if (sprite_index < 35) {
+	    sprite_index++;
+	} else {
+	    sprite_index = 0;
+	}
+	Molson(_set_int)("time", sprite_index, true, engine.getMainShader());
+	// --------------------------------------------------
+
 	glfwSwapBuffers(engine.getWindow());
     }
     Game::destroy();
