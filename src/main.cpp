@@ -14,9 +14,14 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
+#include "../include/nlohmann/json_fwd.hpp"
+#include "../include/nlohmann/json.hpp"
+#include <fstream>
 
 // static int sprite_index_delay = 0;
 // static int sprite_index = 0;
+
+using json = nlohmann::json;
 
 int main(int argc, char *argv[]) {
     Core::Application engine("Golfine << DEBUG");
@@ -30,6 +35,11 @@ int main(int argc, char *argv[]) {
     
     glfwSetKeyCallback(engine.getWindow(), Game::input);
     Game::ready();
+    
+    std::ifstream f("./assets/player/sprite_sheet.json");
+    json data = json::parse(f);
+    std::cout << data.dump(4) << std::endl;
+    
     while (!glfwWindowShouldClose(engine.getWindow())) {
 	if (engine.isKeyPressed(GOLF_ESCAPE)) {
 	    break;
