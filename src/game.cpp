@@ -1,26 +1,25 @@
 
 
 #include <iostream>
+#include <stdlib.h>
 #include <fstream>
+#include <vector>
 
 #include <glm/vec4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 
+#define ANIMATOR_IMPLEMENTATION
+#include "../include/animator.hpp"
 #define PHYSICS_IMPLEMENTATION
 #include "../include/physics.hpp"
 #define MATH_IMPLEMENTATION
 #include "../include/math.hpp"
 
-#include "../include/nlohmann/json_fwd.hpp"
-#include "../include/nlohmann/json.hpp"
 #include "../include/objects.hpp"
 #include "../include/game.hpp"
 #include "../include/core.hpp"
 
-#include <stdlib.h>
-
-using json = nlohmann::json;
 namespace Game {
     
     Core::Application *engine;
@@ -34,6 +33,17 @@ namespace Game {
     Objects::Rectangle *player_hitbox;
     Objects::AnimatedSprite *player;
     
+    // --- animations --- 
+    std::vector<int> walk_frames = { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+    std::vector<int> falling_frames = { 25, 26, 27, 28, 29 };
+    std::vector<int> jump_frames = { 20, 21, 22, 23, 24 };
+    std::vector<int> idle_frames = { 6, 6 };
+    
+    Animator::Animation *FALLING;
+    Animator::Animation *IDLE;
+    Animator::Animation *WALK;
+    Animator::Animation *JUMP;
+    
     Objects::Rectangle *getPlayerHitbox() {
 	return player_hitbox;
     }
@@ -46,6 +56,12 @@ namespace Game {
 	
 	player = new Objects::AnimatedSprite("Player", "./assets/player/sprite_sheet.png", 35.0, 6.0, 6.0, sprite_index, true, false, engine->getMainShader());
 	player_hitbox = new Objects::Rectangle("Player", false);
+	
+	sprite_index = idle_frames[0];
+	FALLING = new Animator::Animation(&falling_frames, true, 3, &sprite_index);
+	IDLE = new Animator::Animation(&idle_frames, true, 0, &sprite_index);
+	WALK = new Animator::Animation(&walk_frames, true, 1, &sprite_index);
+	JUMP = new Animator::Animation(&jump_frames, true, 2, &sprite_index);
 	
 	// TODO: i don't know, it seems ugly and hardcoded.
 	player_hitbox->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -63,10 +79,11 @@ namespace Game {
     const int MAX_JUMP_QUANTITY = 3;
     const float JUMP_FORCE = 40.0f;
     const float FRICTION = 0.07f;
-    const float SPEED = 30.0f;
+    const float SPEED = 25.0f;
     
     const float NORMAL_GRAVITY = 0.08f;
     float GRAVITY = NORMAL_GRAVITY;
+    bool is_on_floor = false;
     
     glm::vec2 velocity = glm::vec2(0.0f, 0.0f);
     static void move(double delta) {
@@ -88,10 +105,18 @@ namespace Game {
 	
 	if (direction == 1.0f || direction == -1.0f) {
 	    forecast_velocity = Math::lerp(velocity.x, SPEED * direction, ACCELERATION);
+	    if (is_on_floor) {
+		WALK->play();
+	    }
 	} else if (direction == 0.0f) {
 	    forecast_velocity = Math::lerp(velocity.x, 0.0f, FRICTION);
+	    if (is_on_floor) {
+		// sprite_index = idle_frames[0];
+		IDLE->play();
+	    }
 	}
 	forecast_player.self.position.x += forecast_velocity * delta;
+	
 	// found out this method. It works, but for sure has problems. That's the X-axis move and collide system.
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
@@ -114,16 +139,6 @@ namespace Game {
     
     int delay = 0;
     void process(double delta) {
-	if (delay < 10) {
-	    delay++;
-	} else {
-	    delay = 0;
-	    if (sprite_index < 35) {
-		sprite_index++;
-	    } else {
-		sprite_index = 0;
-	    }
-	}
 	Molson(_set_int)("index", sprite_index, true, engine->getMainShader());
 	
 	player->self.position = glm::vec3(player_hitbox->self.position.x - 2.5f, player_hitbox->self.position.y - 1.1f, player_hitbox->self.position.z + 0.5f);
@@ -136,8 +151,10 @@ namespace Game {
 	    if (level[i]->name == "block") {
 		if (!Physics::isOnFloor(&player_hitbox->self, &level[i]->self)) {
 		    velocity.y -= GRAVITY;
+		    is_on_floor = false;
 		} else if (Physics::isOnFloor(&player_hitbox->self, &level[i]->self) == true) {
 		    // TODO: bad way to do that
+		    is_on_floor = true;
 		    bool ground = false;
 		    if (velocity.y > 0.0f) { // collision ceiling
 			player_hitbox->self.position.y = level[i]->self.position.y - player_hitbox->self.scale.y;
