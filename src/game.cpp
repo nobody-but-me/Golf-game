@@ -39,15 +39,12 @@ namespace Game {
     }
     
     json player_json_data;
+    int sprite_index = 0;
     void ready() {
 	engine->buildLevel("./assets/test-level.png");
 	level = engine->getLevel();
 	
-	std::ifstream player_json("./assets/player/sprite_sheet.json");
-	player_json_data = json::parse(player_json);
-	// std::cout << player_json_data["sprites"].dump(4) << std::endl; // printing
-	
-	player = new Objects::AnimatedSprite("Player", "./assets/player/sprite_sheet.png", player_json_data["sprites"].size(), 6, 6, 0, true, false, engine->getMainShader());
+	player = new Objects::AnimatedSprite("Player", "./assets/player/sprite_sheet.png", 35.0, 6.0, 6.0, sprite_index, true, false, engine->getMainShader());
 	player_hitbox = new Objects::Rectangle("Player", false);
 	
 	// TODO: i don't know, it seems ugly and hardcoded.
@@ -115,7 +112,20 @@ namespace Game {
 	return;
     }
     
+    int delay = 0;
     void process(double delta) {
+	if (delay < 10) {
+	    delay++;
+	} else {
+	    delay = 0;
+	    if (sprite_index < 35) {
+		sprite_index++;
+	    } else {
+		sprite_index = 0;
+	    }
+	}
+	Molson(_set_int)("index", sprite_index, true, engine->getMainShader());
+	
 	player->self.position = glm::vec3(player_hitbox->self.position.x - 2.5f, player_hitbox->self.position.y - 1.1f, player_hitbox->self.position.z + 0.5f);
 	move(delta);
 	player_hitbox->self.position.x += velocity.x * delta;
@@ -157,7 +167,7 @@ namespace Game {
 	engine->renderLevel(engine->getMainShader());
 	
 	player_hitbox->render(engine->getMainShader());
-	player->render(engine->getMainShader(), player_json_data);
+	player->render(engine->getMainShader());
     }
     
     void destroy() {

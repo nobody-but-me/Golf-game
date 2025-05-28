@@ -61,15 +61,15 @@ namespace Objects {
 	    Object self;
 	    
 	    int sprite_index = 0;
-	    int sprite_columns;
-	    int sprite_frames;
-	    int sprite_rows;
+	    float sprite_columns;
+	    float sprite_frames;
+	    float sprite_rows;
 	    
-	    AnimatedSprite(std::string p_name, std::string p_texture_path, int p_sprite_frames, int p_sprite_columns, int p_sprite_rows, int p_sprite_index, bool p_alpha, bool p_verbose, Shader *p_shader);
+	    AnimatedSprite(std::string p_name, std::string p_texture_path, float p_sprite_frames, float p_sprite_columns, float p_sprite_rows, int p_sprite_index, bool p_alpha, bool p_verbose, Shader *p_shader);
 	    ~AnimatedSprite();
 	    
 	    bool isCollidingRect(Rectangle *p_rect);
-	    void render(Shader *p_shader, json &p_player_json_data);
+	    void render(Shader *p_shader);
     };
     
     class Rectangle {

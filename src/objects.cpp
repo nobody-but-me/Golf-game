@@ -116,7 +116,7 @@ namespace Objects {
 	}
 	return;
     }
-    AnimatedSprite::AnimatedSprite(std::string p_name, std::string p_texture_path, int p_sprite_frames, int p_sprite_columns, int p_sprite_rows, int p_sprite_index, bool p_alpha, bool p_verbose, Shader *p_shader) {
+    AnimatedSprite::AnimatedSprite(std::string p_name, std::string p_texture_path, float p_sprite_frames, float p_sprite_columns, float p_sprite_rows, int p_sprite_index, bool p_alpha, bool p_verbose, Shader *p_shader) {
 	verbose = p_verbose;
 	float vertices[] = {
 	    0.0f, 1.0f, 0.0f, 1.0f,
@@ -149,15 +149,15 @@ namespace Objects {
 	    texture_path = "";
 	}
 	
-	Molson(_set_int)("SPRITE_COLUMNS", p_sprite_columns, true, p_shader);
-	Molson(_set_int)("SPRITE_FRAMES", p_sprite_frames, true, p_shader);
-	Molson(_set_int)("SPRITE_ROWS", p_sprite_rows, true, p_shader);
-	Molson(_set_int)("index", p_sprite_index, true, p_shader);
-	
 	sprite_columns = p_sprite_columns;
 	sprite_frames = p_sprite_frames;
 	sprite_index = p_sprite_index;
 	sprite_rows = p_sprite_rows;
+	
+	Molson(_set_int)("SPRITE_COLUMNS", p_sprite_columns, true, p_shader);
+	Molson(_set_int)("SPRITE_FRAMES", p_sprite_frames, true, p_shader);
+	Molson(_set_int)("SPRITE_ROWS", p_sprite_rows, true, p_shader);
+	Molson(_set_int)("index", p_sprite_index, true, p_shader);
 	
 	initialized = 1;
 	if (verbose == true) {
@@ -166,7 +166,7 @@ namespace Objects {
 	return;
     }
     
-    void AnimatedSprite::render(Shader *p_shader, json &p_player_json_data) {
+    void AnimatedSprite::render(Shader *p_shader) {
 	Molson(_use)(p_shader);
 	
 	glm::mat4 transform = glm::mat4(1.0f);
@@ -184,12 +184,6 @@ namespace Objects {
 	Molson(_set_vector4_f)("color", self.color / 255.0f, false, p_shader);
 	Molson(_set_bool)("is_textured", true, p_shader);
 	Molson(_set_bool)("is_animated", true, p_shader);
-	
-	Molson(_set_int)("sprite_pos_x", p_player_json_data["sprites"][sprite_index]["x"], true, p_shader);
-	Molson(_set_int)("sprite_pos_y", p_player_json_data["sprites"][sprite_index]["y"], true, p_shader);
-	
-	std::cout << p_player_json_data["sprites"][sprite_index]["x"] << std::endl;
-	std::cout << p_player_json_data["sprites"][sprite_index]["y"] << std::endl;
 	
 	if (texture_path != "") {
 	    glActiveTexture(GL_TEXTURE0);

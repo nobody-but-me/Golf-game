@@ -36,7 +36,6 @@ Texture Molson(_load_texture)(const char *_file_path, bool _alpha);
 const char *Molson(_file_to_string)(const char *_file_path);
 
 void Molson(_init_shader)(const char *_vertex_path, const char *_fragment_path, Shader *_shader);
-void Molson(_set_float)(const char *_name, float _value);
 void Molson(_set_bool)(const char *_name, bool _value, Shader *_shader);
 void Molson(_destroy)(Shader *_shader);
 void Molson(_use)(Shader *_shader);
@@ -46,6 +45,7 @@ void Molson(_set_vector2_f)(const char *_name, glm::vec2 _value, bool _use_shade
 void Molson(_set_vector3_f)(const char *_name, glm::vec3 _value, bool _use_shader, Shader *_shader);
 void Molson(_set_vector4_f)(const char *_name, glm::vec4 _value, bool _use_shader, Shader *_shader);
 void Molson(_set_int)(const char *_name, int _value, bool _use_shader, Shader *_shader);
+void Molson(_set_float)(const char *_name, float _value, bool _use_shader, Shader *_shader);
 
 // --------------------------------------------------
 
@@ -322,6 +322,13 @@ void Molson(_set_int)(const char *_name, int _value, bool _use_shader, Shader *_
 	glUseProgram(_shader->ID);
     }
     glUniform1i(glGetUniformLocation(_shader->ID, _name), _value);
+    return;
+}
+void Molson(_set_float)(const char *_name, float _value, bool _use_shader, Shader *_shader) {
+    if (_use_shader) {
+	glUseProgram(_shader->ID);
+    }
+    glUniform1f(glGetUniformLocation(_shader->ID, _name), _value);
     return;
 }
 void Molson(_set_bool)(const char *_name, bool _value, Shader *_shader) {
