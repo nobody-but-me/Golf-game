@@ -36,7 +36,6 @@ namespace Editor {
     static glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
     static glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 1.0f);
     static float camera_position[] = {0.0f, 0.0f, 50.0f};
-    static int sprite_index = 0;
     Core::Application *engine;
     glm::mat4 view;
 
@@ -45,50 +44,47 @@ namespace Editor {
     }
 
     void process(float delta) {
-	    ImGui_ImplOpenGL3_NewFrame();
-	    ImGui_ImplGlfw_NewFrame();
-	    ImGui::NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
 
-	    ImGui::Begin("Camera");
+	ImGui::Begin("Camera");
 
-	    ImGui::SliderFloat3("Position", camera_position, -90.0f, 90.0f);
-	    view = glm::lookAt(glm::vec3(camera_position[0], camera_position[1], camera_position[2]), glm::vec3(camera_position[0], camera_position[1], camera_position[2]) + camera_front, camera_up);
-	    Molson(_set_matrix4)("view", &view, true, engine->getMainShader());
+	ImGui::SliderFloat3("Position", camera_position, -90.0f, 90.0f);
+	view = glm::lookAt(glm::vec3(camera_position[0], camera_position[1], camera_position[2]), glm::vec3(camera_position[0], camera_position[1], camera_position[2]) + camera_front, camera_up);
+	Molson(_set_matrix4)("view", &view, true, engine->getMainShader());
 
-	    ImGui::End();
+	ImGui::End();
 
-	    ImGui::Begin("Player");
+	ImGui::Begin("Player");
 
-	    ImGui::SliderFloat("Position X", &Game::getPlayerHitbox()->self.position.x, -200.0f, 200.0f);
-	    ImGui::SliderFloat("Position Y", &Game::getPlayerHitbox()->self.position.y, -200.0f, 200.0f);
-	    ImGui::SliderFloat("Position Z", &Game::getPlayerHitbox()->self.position.z, -200.0f, 200.0f);
+	ImGui::SliderFloat("Position X", &Game::getPlayerHitbox()->self.position.x, -200.0f, 200.0f);
+	ImGui::SliderFloat("Position Y", &Game::getPlayerHitbox()->self.position.y, -200.0f, 200.0f);
+	ImGui::SliderFloat("Position Z", &Game::getPlayerHitbox()->self.position.z, -200.0f, 200.0f);
 
-	    ImGui::SliderInt("Sprite Index", &sprite_index, 0, 35);
+	ImGui::End();
 
-	    ImGui::End();
-	    Molson(_set_int)("time", sprite_index, true, engine->getMainShader());
-
-	    ImGui::Render();
-	    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         return;
     }
 
     void destroy() {
-	    ImGui_ImplOpenGL3_Shutdown();
-	    ImGui_ImplGlfw_Shutdown();
-	    ImGui::DestroyContext();
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
         return;
     }
 
     void init(const char *p_glsl_version, GLFWwindow *p_window) {
         view = *engine->getView();
 
-	    IMGUI_CHECKVERSION();
-	    ImGui::CreateContext();
-	    // ImGuiIO &io = ImGui::GetIO();
-	    ImGui_ImplGlfw_InitForOpenGL(p_window, true);
-	    ImGui_ImplOpenGL3_Init(p_glsl_version);
-	    ImGui::StyleColorsDark();
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	// ImGuiIO &io = ImGui::GetIO();
+	ImGui_ImplGlfw_InitForOpenGL(p_window, true);
+	ImGui_ImplOpenGL3_Init(p_glsl_version);
+	ImGui::StyleColorsDark();
         return;
     }
 }

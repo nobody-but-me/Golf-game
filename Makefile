@@ -1,6 +1,6 @@
 
 INCLUDE := -I./include/ -I./lib/ -I./lib/glm/ -I./lib/imgui/
-CFLAGS := -Wl,--copy-dt-needed-entries -lglfw -lglut -ldl -Werror -Wall -pedantic -Wno-unused-but-set-variable
+CFLAGS := -Wl,--copy-dt-needed-entries -lglfw -lglut -Werror -Wall -pedantic -Wno-unused-but-set-variable
 CC := g++
 
 SRC_PATH := ./src

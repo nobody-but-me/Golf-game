@@ -1,6 +1,7 @@
 
 
 #include <iostream>
+#include <fstream>
 
 #include <glm/vec4.hpp>
 #include <glm/vec3.hpp>
@@ -11,12 +12,15 @@
 #define MATH_IMPLEMENTATION
 #include "../include/math.hpp"
 
+#include "../include/nlohmann/json_fwd.hpp"
+#include "../include/nlohmann/json.hpp"
 #include "../include/objects.hpp"
 #include "../include/game.hpp"
 #include "../include/core.hpp"
 
 #include <stdlib.h>
 
+using json = nlohmann::json;
 namespace Game {
     
     Core::Application *engine;
@@ -28,17 +32,22 @@ namespace Game {
     }
     
     Objects::Rectangle *player_hitbox;
-    Objects::Sprite *player;
+    Objects::AnimatedSprite *player;
     
     Objects::Rectangle *getPlayerHitbox() {
 	return player_hitbox;
     }
     
+    json player_json_data;
     void ready() {
 	engine->buildLevel("./assets/test-level.png");
 	level = engine->getLevel();
 	
-	player = new Objects::Sprite("Player", "./assets/player/sprite_sheet.png", true, false);
+	std::ifstream player_json("./assets/player/sprite_sheet.json");
+	player_json_data = json::parse(player_json);
+	// std::cout << player_json_data["sprites"].dump(4) << std::endl; // printing
+	
+	player = new Objects::AnimatedSprite("Player", "./assets/player/sprite_sheet.png", player_json_data["sprites"].size(), 6, 6, 0, true, false, engine->getMainShader());
 	player_hitbox = new Objects::Rectangle("Player", false);
 	
 	// TODO: i don't know, it seems ugly and hardcoded.
@@ -148,7 +157,7 @@ namespace Game {
 	engine->renderLevel(engine->getMainShader());
 	
 	player_hitbox->render(engine->getMainShader());
-	player->render(engine->getMainShader());
+	player->render(engine->getMainShader(), player_json_data);
     }
     
     void destroy() {

@@ -9,6 +9,9 @@
 
 #include "./molson.h"
 
+#include "./nlohmann/json_fwd.hpp"
+#include "./nlohmann/json.hpp"
+using json = nlohmann::json;
 namespace Objects {
     
     typedef struct Object {
@@ -43,6 +46,30 @@ namespace Objects {
 	    bool isCollidingRect(Rectangle *p_rect);
 	    void render(Shader *p_shader);
 	    
+    };
+    
+    class AnimatedSprite {
+	private:
+	    std::string texture_path;
+	    bool texture_alpha;
+	    bool texture_flip;
+	    Texture texture;
+	public:
+	    bool initialized;
+	    std::string name;
+	    bool verbose;
+	    Object self;
+	    
+	    int sprite_index = 0;
+	    int sprite_columns;
+	    int sprite_frames;
+	    int sprite_rows;
+	    
+	    AnimatedSprite(std::string p_name, std::string p_texture_path, int p_sprite_frames, int p_sprite_columns, int p_sprite_rows, int p_sprite_index, bool p_alpha, bool p_verbose, Shader *p_shader);
+	    ~AnimatedSprite();
+	    
+	    bool isCollidingRect(Rectangle *p_rect);
+	    void render(Shader *p_shader, json &p_player_json_data);
     };
     
     class Rectangle {
