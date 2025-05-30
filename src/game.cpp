@@ -29,6 +29,9 @@ namespace Game {
     Objects::Rectangle *getPlayerHitbox() {
 	return player->player_hitbox;
     }
+    int *getPlayerSpriteIndex() {
+	return player->getSpriteIndex();
+    }
     
     void ready() {
 	engine->buildLevel("./assets/test-level.png");

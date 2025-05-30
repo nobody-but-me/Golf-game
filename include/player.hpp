@@ -33,11 +33,14 @@ namespace PLAYER {
 	    
 	    glm::vec2 velocity = glm::vec2(0.0f, 0.0f);
 	public:
+	    int *getSpriteIndex() {
+		return &sprite_index;
+	    }
+	    
 	    std::vector<Objects::Rectangle*> level;
 	    Objects::Rectangle *player_hitbox;
 	    Objects::AnimatedSprite *player;
 	    Core::Application *engine;
-	    
 	    
 	    Player(Core::Application *p_engine);
 	    ~Player();
@@ -74,20 +77,26 @@ namespace PLAYER {
     // TODO: find a better place to put these.
     // --- ANIMATIONS --- 
     std::vector<int> walk_frames = { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
-    std::vector<int> falling_frames = { 25, 26, 27, 28, 29 };
-    std::vector<int> jump_frames = { 20, 21, 22, 23, 24 };
+    std::vector<int> fall_frames = { 25, 26, 27, 28, 29 };
+    std::vector<int> jump_frames = { 21, 22, 23, 24 };
     std::vector<int> idle_frames = { 6, 6 };
+    // std::vector<int> idle_frames = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 }; // for purpose of test
 
     Player::Player(Core::Application *p_engine) {
-	Animator::Animation *FALLING;
-	Animator::Animation *JUMP;
 	Animator::Animation *IDLE;
 	Animator::Animation *WALK;
+	Animator::Animation *JUMP;
+	Animator::Animation *FALL;
 	
-	animations.push_back(FALLING);
-	animations.push_back(JUMP);
+	IDLE = new Animator::Animation(&idle_frames, true, 5, &sprite_index);
+	WALK = new Animator::Animation(&walk_frames, true, 1, &sprite_index);
+	JUMP = new Animator::Animation(&jump_frames, true, 1, &sprite_index);
+	FALL = new Animator::Animation(&fall_frames, true, 1, &sprite_index);
+	
 	animations.push_back(IDLE);
 	animations.push_back(WALK);
+	animations.push_back(JUMP);
+	animations.push_back(FALL);
 	
 	engine = p_engine;
 	
@@ -104,11 +113,6 @@ namespace PLAYER {
 	player->self.scale = glm::vec2(8.5f, 8.5f);
 	
 	sprite_index = idle_frames[0];
-	
-	animations[0] = new Animator::Animation(&falling_frames, false, 1, &sprite_index);
-	animations[1] = new Animator::Animation(&jump_frames, false, 1, &sprite_index);
-	animations[2] = new Animator::Animation(&idle_frames, true, 0, &sprite_index);
-	animations[3] = new Animator::Animation(&walk_frames, true, 1, &sprite_index);
 	
 	return;
     }
@@ -136,10 +140,10 @@ namespace PLAYER {
 	float FORECASTING_VELOCITY;
 	if (direction == 1.0f || direction == -1.0f) {
 	    FORECASTING_VELOCITY = Math::lerp(velocity.x, SPEED * direction, ACCELERATION);
-	    if (is_on_floor) animations[3]->play();
+	    if (is_on_floor) animations[1]->play(); else animations[1]->stop(); // walk animation
 	} else if (direction == 0.0f) {
 	    FORECASTING_VELOCITY = Math::lerp(velocity.x, 0.0f, FRICTION);
-	    if (is_on_floor) animations[2]->play();
+	    if (is_on_floor) animations[0]->play(); else animations[0]->stop(); // idle animation
 	}
 	FORECASTING_PLAYER.self.position.x += FORECASTING_VELOCITY * delta;
 	
@@ -158,6 +162,15 @@ namespace PLAYER {
 	    }
 	}
 	velocity.x = FORECASTING_VELOCITY;
+	
+	std::cout << sprite_index << std::endl;
+	if (velocity.y < -3.0f || velocity.y > 3.0f) {
+	    if (velocity.y > 0.0f) {
+		animations[2]->play();
+	    } else {
+		animations[3]->play();
+	    }
+	}
 	return;
     }
     void Player::render(double delta) {
@@ -173,7 +186,7 @@ namespace PLAYER {
 	// this reminds me of the good game maker times...
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (!Physics::isOnFloor(&player_hitbox->self, &level[i]->self)) {
+		if (!Physics::isOnFloor(&player_hitbox->self, &level[i]->self)) { // is on floor is also dectecting the ceiling.
 		    velocity.y -= GRAVITY;
 		    is_on_floor = false;
 		} else {
@@ -195,6 +208,7 @@ namespace PLAYER {
 		}
 	    }
 	}
+	
 	player_hitbox->render(engine->getMainShader());
 	player->render(engine->getMainShader());
 	return;

@@ -53,15 +53,17 @@ namespace Editor {
 	ImGui::SliderFloat3("Position", camera_position, -90.0f, 90.0f);
 	view = glm::lookAt(glm::vec3(camera_position[0], camera_position[1], camera_position[2]), glm::vec3(camera_position[0], camera_position[1], camera_position[2]) + camera_front, camera_up);
 	Molson(_set_matrix4)("view", &view, true, engine->getMainShader());
-
+	
 	ImGui::End();
-
+	
 	ImGui::Begin("Player");
-
+	
 	ImGui::SliderFloat("Position X", &Game::getPlayerHitbox()->self.position.x, -200.0f, 200.0f);
 	ImGui::SliderFloat("Position Y", &Game::getPlayerHitbox()->self.position.y, -200.0f, 200.0f);
 	ImGui::SliderFloat("Position Z", &Game::getPlayerHitbox()->self.position.z, -200.0f, 200.0f);
-
+	
+	ImGui::SliderInt("Sprite Index", Game::getPlayerSpriteIndex(), 0, 35);
+	
 	ImGui::End();
 
 	ImGui::Render();
