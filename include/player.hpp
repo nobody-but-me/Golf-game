@@ -79,7 +79,7 @@ namespace PLAYER {
     std::vector<int> walk_frames = { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
     std::vector<int> fall_frames = { 25, 26, 27, 28, 29 };
     std::vector<int> jump_frames = { 21, 22, 23, 24 };
-    std::vector<int> idle_frames = { 6, 6 };
+    std::vector<int> idle_frames = { 6, 6, 6 };
     // std::vector<int> idle_frames = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 }; // for purpose of test
 
     Player::Player(Core::Application *p_engine) {
@@ -88,10 +88,10 @@ namespace PLAYER {
 	Animator::Animation *JUMP;
 	Animator::Animation *FALL;
 	
-	IDLE = new Animator::Animation(&idle_frames, true, 5, &sprite_index);
+	IDLE = new Animator::Animation(&idle_frames, false, 5, &sprite_index);
 	WALK = new Animator::Animation(&walk_frames, true, 1, &sprite_index);
-	JUMP = new Animator::Animation(&jump_frames, true, 1, &sprite_index);
-	FALL = new Animator::Animation(&fall_frames, true, 1, &sprite_index);
+	JUMP = new Animator::Animation(&jump_frames, false, 1, &sprite_index);
+	FALL = new Animator::Animation(&fall_frames, false, 1, &sprite_index);
 	
 	animations.push_back(IDLE);
 	animations.push_back(WALK);
@@ -163,13 +163,19 @@ namespace PLAYER {
 	}
 	velocity.x = FORECASTING_VELOCITY;
 	
-	std::cout << sprite_index << std::endl;
 	if (velocity.y < -3.0f || velocity.y > 3.0f) {
 	    if (velocity.y > 0.0f) {
-		animations[2]->play();
+		if (!animations[2]->played) {
+		    animations[2]->play();
+		}
 	    } else {
-		animations[3]->play();
+		if (!animations[3]->played) {
+		    animations[3]->play();
+		}
 	    }
+	} else {
+	    animations[2]->played = false;
+	    animations[3]->played = false;
 	}
 	return;
     }

@@ -10,12 +10,14 @@ namespace Animator {
     class Animation {
 	private:
 	    std::vector<int> frames;
+	    int delay_length = 0;
 	    int *sprite_index;
 	    bool loop = false;
-	    int delay_length = 0;
 	    int delay = 0;
+	    int index = 0;
 	public:
 	    bool is_playing = false;
+	    bool played = false;
 	    
 	    Animation(std::vector<int> *p_frames, bool p_loop, int p_delay_length, int *p_sprite_index);
 	    ~Animation();
@@ -47,38 +49,50 @@ namespace Animator {
     
     void Animation::stop() {
 	is_playing = false;
+	played = true;
 	return;
     }
     void Animation::play() {
 	is_playing = true;
 	
-	size_t length = frames.size();
 	// I am almost sure this is the uglier code I've ever written.
-	if (loop == true) {
-	    if (is_playing) {
+	if (is_playing) {
+	    if (loop) {
 		if (delay < delay_length) {
 		    delay++;
 		} else {
-		    if (*sprite_index < int(length)) {
-			*sprite_index += 1;
+		    size_t length = frames.size();
+		    if (index < int(length)) {
+			*sprite_index = frames[index];
+			index++;
 		    } else {
 			*sprite_index = frames[0];
+			index = 0;
+		    }
+		    delay = 0;
+		}
+	    } else {
+		if (delay < delay_length) {
+		    delay++;
+		} else {
+		    size_t length = frames.size();
+		    if (index < int(length)) {
+			*sprite_index = frames[index];
+			index++;
+		    } else {
+			is_playing = false;
+			played = true;
+			index = 0;
 		    }
 		    delay = 0;
 		}
 	    }
-	} else {
-	    if (delay < delay_length) {
-		delay++;
-	    } else {
-		if (*sprite_index < int(length)) {
-		    *sprite_index += 1;
-		} else {
-		    is_playing = false;
-		}
-		delay = 0;
-	    }
 	}
+	// if (loop == true) {
+	//     if (is_playing) {
+	//     }
+	// } else {
+	// }
 	return;
     }
 }
