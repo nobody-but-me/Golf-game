@@ -32,29 +32,17 @@ namespace Editor {
 #include "./molson.h"
 
 namespace Editor {
-
-    static glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
-    static glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 1.0f);
-    static float camera_position[] = {0.0f, 0.0f, 50.0f};
+    
     Core::Application *engine;
-    glm::mat4 view;
-
+    
     void setApplication(Core::Application *p_engine) {
         engine = p_engine;
     }
-
+    
     void process(float delta) {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
-
-	ImGui::Begin("Camera");
-
-	ImGui::SliderFloat3("Position", camera_position, -90.0f, 90.0f);
-	view = glm::lookAt(glm::vec3(camera_position[0], camera_position[1], camera_position[2]), glm::vec3(camera_position[0], camera_position[1], camera_position[2]) + camera_front, camera_up);
-	Molson(_set_matrix4)("view", &view, true, engine->getMainShader());
-	
-	ImGui::End();
 	
 	ImGui::Begin("Player");
 	
@@ -79,8 +67,6 @@ namespace Editor {
     }
 
     void init(const char *p_glsl_version, GLFWwindow *p_window) {
-        view = *engine->getView();
-
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	// ImGuiIO &io = ImGui::GetIO();
