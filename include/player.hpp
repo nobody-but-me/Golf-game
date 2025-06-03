@@ -45,8 +45,9 @@ namespace PLAYER {
 	    Player(Core::Application *p_engine);
 	    ~Player();
 	    
-	    void render(double delta);
+	    void process(double delta);
 	    void move(double delta);
+	    void render();
 	    
 	};
 }
@@ -80,7 +81,6 @@ namespace PLAYER {
     std::vector<int> fall_frames = { 25, 26, 27, 28, 29 };
     std::vector<int> jump_frames = { 21, 22, 23, 24 };
     std::vector<int> idle_frames = { 6, 6, 6 };
-    // std::vector<int> idle_frames = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35 }; // for purpose of test
 
     Player::Player(Core::Application *p_engine) {
 	Animator::Animation *IDLE;
@@ -179,7 +179,8 @@ namespace PLAYER {
 	}
 	return;
     }
-    void Player::render(double delta) {
+    
+    void Player::process(double delta) {
 	Molson(_set_int)("index", sprite_index, true, engine->getMainShader());
 	
 	player->self.position = glm::vec3(player_hitbox->self.position.x - 2.5f, player_hitbox->self.position.y - 1.1f, player_hitbox->self.position.z + 0.5f);
@@ -214,7 +215,10 @@ namespace PLAYER {
 		}
 	    }
 	}
-	
+	return;
+    }
+    
+    void Player::render() {
 	player_hitbox->render(engine->getMainShader());
 	player->render(engine->getMainShader());
 	return;

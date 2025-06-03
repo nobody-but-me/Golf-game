@@ -53,8 +53,7 @@ namespace Game {
 	view = glm::lookAt(glm::vec3(player->player_hitbox->self.position.x, player->player_hitbox->self.position.y + 5.0f, 50.0f), glm::vec3(player->player_hitbox->self.position.x, player->player_hitbox->self.position.y + 5.0f, 50.0f) + camera_front, camera_up);
 	Molson(_set_matrix4)("view", &view, true, engine->getMainShader());
 	
-	engine->renderLevel(engine->getMainShader());
-	player->render(delta);
+	player->process(delta);
 	return;
     }
     
@@ -63,6 +62,8 @@ namespace Game {
     }
     
     void render() {
+	engine->renderLevel(engine->getMainShader());
+	player->render();
 	return;
     }
     void destroy() {
