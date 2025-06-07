@@ -16,17 +16,16 @@
 
 int main(int argc, char *argv[]) {
     Core::Application engine("Golfine << DEBUG");
-
+    
     Editor::setApplication(&engine);
     Game::setApplication(&engine);
     
     // TODO: change the place of this delta time logic.
     double last_time = glfwGetTime();
-    double delta = 0;
+    double delta = 0.0f;
     
     glfwSetKeyCallback(engine.getWindow(), Game::input);
     Game::ready();
-    
     while (!glfwWindowShouldClose(engine.getWindow())) {
 	if (engine.isKeyPressed(GOLF_ESCAPE)) {
 	    break;
@@ -41,22 +40,7 @@ int main(int argc, char *argv[]) {
 	Game::process(delta);
 	Game::render();
 	Editor::process(delta);
-
-    // ---------------for purposes of test---------------
-    // if (sprite_index_delay < 5) {
-    //     sprite_index_delay++;
-    // } else {
-	//     if (sprite_index < 35) {
-    //         std::cout << sprite_index << std::endl;
-	//         sprite_index++;
-	//     } else {
-	//         sprite_index = 0;
-	//     }
-    //     sprite_index_delay = 0;
-    // }
-	// Molson(_set_int)("time", sprite_index, true, engine.getMainShader());
-	// --------------------------------------------------
-
+	
 	glfwSwapBuffers(engine.getWindow());
     }
     Game::destroy();

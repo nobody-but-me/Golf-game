@@ -63,13 +63,12 @@ namespace Core {
 	        bool running = false;
 	        GLFWwindow *window;
 	        Shader main_shader;
-
 	    public:
 	        const int  *getWindowHeight();
 	        const int  *getWindowWidth();
 	        Shader     *getMainShader();
 	        GLFWwindow *getWindow();
-            glm::mat4  *getView();
+		glm::mat4  *getView();
 
 	        bool isKeyPressed(int p_key);
 	        bool isKeyJustPressed(int p_key);
