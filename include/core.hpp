@@ -57,9 +57,9 @@ namespace Core {
     
     class Application {
 	    private:
+	        const int WIDTH  = 1024;
 	        const int HEIGHT = 600;
-	        const int WIDTH  = 800;
-
+		
 	        bool running = false;
 	        GLFWwindow *window;
 	        Shader main_shader;

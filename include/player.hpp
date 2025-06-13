@@ -105,7 +105,7 @@ namespace PLAYER {
 	
 	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 0.0f);
 	player_hitbox->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	player->self.position = glm::vec3(-2.0f, -2.0f, -5.0f);
+	player_hitbox->self.position = glm::vec3(-2.0f, 62.0f, -1.0f);
 	player_hitbox->self.scale = glm::vec2(3.0f, 6.0f);
 	
 	player->self.color = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
@@ -193,26 +193,24 @@ namespace PLAYER {
 	// this reminds me of the good game maker times...
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (!Physics::isOnFloor(&player_hitbox->self, &level[i]->self)) { // is on floor is also dectecting the ceiling.
+		if (!Physics::isColliding(&player_hitbox->self, &level[i]->self)) { // is on floor is also dectecting the ceiling.
 		    velocity.y -= GRAVITY;
 		    is_on_floor = false;
 		} else {
-		    bool ground = false;
 		    if (velocity.y > 0.0f) player_hitbox->self.position.y = level[i]->self.position.y - player_hitbox->self.scale.y;
 		    else if (velocity.y < 0.0f) {
 			player_hitbox->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
-			ground = true;
+			is_on_floor = true;
 		    }
 		    velocity.y = 0.0f;
-		    
-		    if (ground) {
-			is_on_floor = true;
-			if (engine->isKeyPressed(GOLF_UP)) {
-			    velocity.y = JUMP_FORCE;
-			}
-		    }
 		    break;
 		}
+	    }
+	}
+	
+	if (is_on_floor) {
+	    if (engine->isKeyPressed(GOLF_UP)) {
+		velocity.y = JUMP_FORCE;
 	    }
 	}
 	return;

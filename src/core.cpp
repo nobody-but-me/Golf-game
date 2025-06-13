@@ -58,7 +58,7 @@ namespace Core {
     
     static void window_resized_callback(GLFWwindow *window, int w, int h) {
 	glfwGetFramebufferSize(window, &w, &h);
-	glViewport(0, 0, w, h);
+	glViewport(w / 2 - (1064 / 2), 0, 1064, 600);
 	return;
     }
     
@@ -120,15 +120,15 @@ namespace Core {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	
 	Editor::init(glsl_version, window);
-
+	
 	Molson(_init_shader)("./shaders/object.vert", "./shaders/object.frag", &main_shader);
-
+	
 	view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -50.0f));
 	projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 	// projection = glm::ortho(0.0f, (float)WIDTH, (float)HEIGHT, 0.0f, -1.0f, 1.0f);
-
+	
 	Molson(_set_matrix4)("projection", &projection, true, &main_shader);
 	Molson(_set_matrix4)("view", &view, true, &main_shader);
 	Molson(_set_int)("object_image", 0, true, &main_shader);
@@ -155,7 +155,10 @@ namespace Core {
 	return level;
     }
     void Application::buildLevel(std::string p_level_path) {
+	level.clear();
+	
 	int width, height, channels;
+	stbi_set_flip_vertically_on_load(true);
 	unsigned char *data = stbi_load(p_level_path.c_str(), &width, &height, &channels, 3);
 	/*
 	a[
@@ -194,7 +197,7 @@ namespace Core {
 		    block->self.color = glm::vec4(42.0f, 93.0f, 232.0f, 255.0f);
 		    block->self.scale = glm::vec2(3.0f, 3.0f);
 
-		    block->self.position = glm::vec3((x * block->self.scale.x) - width / 2, ((y * block->self.scale.y) * -1) + height / 2, 0.0f);
+		    block->self.position = glm::vec3((x * block->self.scale.x) - width / 2, y * block->self.scale.y, 0.0f);
 		    level.push_back(block);
 		}
 		else if (matrix[y][x][0] == 255 && matrix[y][x][1] == 0 && matrix[y][x][2] == 0) {
@@ -204,7 +207,7 @@ namespace Core {
 		    block->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 255.0f);
 		    block->self.scale = glm::vec2(3.0f, 3.0f);
 
-		    block->self.position = glm::vec3((x * block->self.scale.x) - width / 2, ((y * block->self.scale.y) * -1) + height / 2, 0.0f);
+		    block->self.position = glm::vec3((x * block->self.scale.x) - width / 2, y * block->self.scale.y, 0.0f);
 		    level.push_back(block);
 		}
 	    }

@@ -53,6 +53,12 @@ namespace Game {
 	view = glm::lookAt(glm::vec3(player->player_hitbox->self.position.x, player->player_hitbox->self.position.y + 5.0f, 50.0f), glm::vec3(player->player_hitbox->self.position.x, player->player_hitbox->self.position.y + 5.0f, 50.0f) + camera_front, camera_up);
 	Molson(_set_matrix4)("view", &view, true, engine->getMainShader());
 	
+	if (engine->isKeyPressed(GOLF_R)) {
+	    engine->buildLevel("./assets/test-level.png");
+	    level = engine->getLevel();
+	    player->level = level;
+	}
+	
 	player->process(delta);
 	return;
     }

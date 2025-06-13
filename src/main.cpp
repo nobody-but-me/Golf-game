@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 	    break;
 	}
 	glfwPollEvents();
-	glClearColor(0.024f, 0.024f, 0.024f, 1.0f);
+	glClearColor(130.f, 182.f, 214.f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	delta = glfwGetTime() - last_time;
