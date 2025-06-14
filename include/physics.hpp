@@ -7,6 +7,10 @@
 
 namespace Physics {
     bool isOnFloor(Objects::Object *rect1, Objects::Object *rect2);
+    
+    bool isHorizontallyAligned(Objects::Object *rect1, Objects::Object *rect2);
+    bool isVerticallyAligned(Objects::Object *rect1, Objects::Object *rect2);
+    
     bool isColliding(Objects::Object *rect1, Objects::Object *rect2);
 }
 
@@ -24,25 +28,33 @@ namespace Physics {
 namespace Physics {
     
     bool isOnFloor(Objects::Object *rect1, Objects::Object *rect2) {
-	if (isColliding(rect1, rect2)) {
-	    return (rect1->position.y <= rect2->position.y + rect2->scale.y);
-	}
 	return false;
     }
     
-    bool isColliding(Objects::Object *rect1, Objects::Object *rect2) {
-	glm::vec2 distance = glm::vec2(rect1->position.x - rect2->position.x, rect1->position.y - rect2->position.y);
-	// std::cout << "x: " << distance.x << " y: " << distance.y << std::endl;
-	if ((distance.x > 6 || distance.x < -6) && (distance.y > 6 || distance.y < -6)) return false;
-	
-	bool is_colliding = true;
-	
-	is_colliding &= (rect1->position.x < rect2->position.x + rect2->scale.x && rect1->position.x + rect1->scale.x > rect2->position.x) || (rect1->position.x + rect1->scale.x > rect2->position.x && rect1->position.x < rect2->position.x + rect2->scale.x);
-	is_colliding &= (rect1->position.y < rect2->position.y + rect2->scale.y && rect1->position.y + rect1->scale.y > rect2->position.y) || (rect1->position.y + rect1->scale.y > rect2->position.y && rect1->position.y < rect2->position.y + rect2->scale.y);
-	
-	return is_colliding;
+    bool isHorizontallyAligned(Objects::Object *rect1, Objects::Object *rect2) {
+	return (rect1->position.x < rect2->position.x + rect2->scale.x &&
+                rect1->position.x + rect1->scale.x > rect2->position.x);
+    }
+    bool isVerticallyAligned(Objects::Object *rect1, Objects::Object *rect2) {
+	return (rect1->position.y < rect2->position.y + rect2->scale.y &&
+                rect1->position.y + rect1->scale.y > rect2->position.y);
     }
     
+    bool isColliding(Objects::Object *rect1, Objects::Object *rect2) {
+	const float MARGIN = 6.0f;
+	
+	glm::vec2 center1 = {rect1->position.x + rect1->scale.x / 2.0f, rect1->position.y + rect1->scale.y / 2.0f};
+	glm::vec2 center2 = {rect2->position.x + rect2->scale.x / 2.0f, rect2->position.y + rect2->scale.y / 2.0f};
+	
+	glm::vec2 distance = {std::abs(center1.x - center2.x), std::abs(center1.y - center2.y)};
+	glm::vec2 max = {(rect1->scale.x + rect2->scale.x) / 2.0f + MARGIN, (rect1->scale.y + rect2->scale.y) / 2.0f + MARGIN};
+	if (distance.x > max.x || distance.y > max.y) return false;
+	
+	return (rect1->position.x < rect2->position.x + rect2->scale.x &&
+                rect1->position.x + rect1->scale.x > rect2->position.x &&
+		rect1->position.y < rect2->position.y + rect2->scale.y &&
+                rect1->position.y + rect1->scale.y > rect2->position.y);
+    }
 }
 
 #endif//PHYSICS_IMPLEMENTATION

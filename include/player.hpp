@@ -17,11 +17,11 @@
 namespace PLAYER {
     class Player {
 	private:
-	    const float NORMAL_GRAVITY = 0.08f;
+	    const float NORMAL_GRAVITY = 2.3f;
 	    const float ACCELERATION = 0.2;
 	    const float JUMP_FORCE = 40.0f;
 	    const float FRICTION = 0.07f;
-	    const float SPEED = 25.0f;
+	    const float SPEED = 23.0f;
 	    
 	    float GRAVITY = NORMAL_GRAVITY;
 	    bool is_on_ceiling = false;
@@ -149,11 +149,14 @@ namespace PLAYER {
 	
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (Physics::isColliding(&FORECASTING_PLAYER.self, &level[i]->self)) {
-		    if (velocity.x > 0.0f) {
+		if (Physics::isColliding(&FORECASTING_PLAYER.self, &level[i]->self) 
+		 && Physics::isHorizontallyAligned(&FORECASTING_PLAYER.self, &level[i]->self)) {
+		    // if (velocity.x > 0.0f) {
+		    if (FORECASTING_VELOCITY > 0.0f) {
 			player_hitbox->self.position.x = level[i]->self.position.x - player_hitbox->self.scale.x;
 			velocity.x = 0.0f;
-		    } else if (velocity.x < 0.0f) {
+		    // } else if (velocity.x < 0.0f) {
+		    } else if (FORECASTING_VELOCITY < 0.0f) {
 			player_hitbox->self.position.x = level[i]->self.position.x + level[i]->self.scale.x;
 			velocity.x = 0.0f;
 		    }
@@ -190,29 +193,28 @@ namespace PLAYER {
 	player_hitbox->self.position.x += velocity.x * delta;
 	player_hitbox->self.position.y += velocity.y * delta;
 	
-	// this reminds me of the good game maker times...
+	// // this reminds me of the good game maker times...
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (!Physics::isColliding(&player_hitbox->self, &level[i]->self)) { // is on floor is also dectecting the ceiling.
-		    velocity.y -= GRAVITY;
-		    is_on_floor = false;
-		} else {
+		if (Physics::isColliding(&player_hitbox->self, &level[i]->self) && 
+		    Physics::isVerticallyAligned(&player_hitbox->self, &level[i]->self)
+		    ) {
 		    if (velocity.y > 0.0f) player_hitbox->self.position.y = level[i]->self.position.y - player_hitbox->self.scale.y;
 		    else if (velocity.y < 0.0f) {
 			player_hitbox->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
 			is_on_floor = true;
 		    }
 		    velocity.y = 0.0f;
-		    break;
+		    
+		    if (engine->isKeyPressed(GOLF_UP)) {
+			velocity.y = JUMP_FORCE;
+		    }
+		    return;
 		}
 	    }
 	}
-	
-	if (is_on_floor) {
-	    if (engine->isKeyPressed(GOLF_UP)) {
-		velocity.y = JUMP_FORCE;
-	    }
-	}
+	velocity.y -= GRAVITY;
+	is_on_floor = false;
 	return;
     }
     
