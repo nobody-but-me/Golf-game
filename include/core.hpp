@@ -66,23 +66,34 @@ namespace Core {
 	        GLFWwindow *window;
 	        Shader main_shader;
 	    public:
-	        int        *getWindowHeight();
-	        int        *getWindowWidth();
-	        Shader     *getMainShader();
-	        GLFWwindow *getWindow();
-		glm::mat4  *getView();
+		
+	        Shader     *get_main_shader() {
+		    return &main_shader;
+		}
+	        bool        is_running() { 
+		    return running;
+		}
+	        GLFWwindow *get_window() {
+		    return window;
+		}
+	        int        *get_window_height() {
+		    return &HEIGHT;
+		}
+	        int        *get_window_width() {
+		    return &WIDTH;
+		}
 		
 	        int set_window_height();
 	        int set_window_width();
+		glm::mat4  *get_view();
 
-	        bool isKeyPressed(int p_key);
-	        bool isKeyJustPressed(int p_key);
-	        bool isRunning();
+	        bool is_key_just_pressed(int p_key);
+	        bool is_key_pressed(int p_key);
 
-	        std::vector<Objects::Rectangle*> &getLevel();
-	        void buildLevel(std::string p_level_path);
-	        void renderLevel(Shader *p_shader);
-	        void destroyLevel();
+	        std::vector<Objects::Rectangle*> &get_level();
+	        void build_level(std::string p_level_path);
+	        void render_level(Shader *p_shader);
+	        void destroy_level();
 
 	        Application(std::string p_title);
 	        ~Application();

@@ -40,7 +40,6 @@ namespace Objects {
 	    Sprite(std::string p_name, std::string p_texture_path, bool p_alpha, bool p_verbose);
 	    ~Sprite();
 	    
-	    bool isCollidingRect(Rectangle *p_rect);
 	    void render(Shader *p_shader);
 	    
     };
@@ -65,7 +64,6 @@ namespace Objects {
 	    AnimatedSprite(std::string p_name, std::string p_texture_path, float p_sprite_frames, float p_sprite_columns, float p_sprite_rows, int p_sprite_index, bool p_alpha, bool p_verbose, Shader *p_shader);
 	    ~AnimatedSprite();
 	    
-	    bool isCollidingRect(Rectangle *p_rect);
 	    void render(Shader *p_shader);
     };
     
@@ -79,7 +77,6 @@ namespace Objects {
 	    Rectangle(std::string p_name, bool p_verbose);
 	    ~Rectangle();
 	    
-	    bool isCollidingRect(Rectangle *p_object);
 	    void render(Shader *p_shader);
     };
     

@@ -18,10 +18,10 @@ int main(int argc, char *argv[]) {
     double last_time = glfwGetTime();
     double delta = 0.0f;
     
-    glfwSetKeyCallback(engine.getWindow(), Game::input);
+    glfwSetKeyCallback(engine.get_window(), Game::input);
     Game::ready();
-    while (!glfwWindowShouldClose(engine.getWindow())) {
-	if (engine.isKeyPressed(GOLF_ESCAPE)) {
+    while (!glfwWindowShouldClose(engine.get_window())) {
+	if (engine.is_key_pressed(GOLF_ESCAPE)) {
 	    break;
 	}
 	glfwPollEvents();
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	int w, h;
-	glfwGetWindowSize(engine.getWindow(), &w, &h);
+	glfwGetWindowSize(engine.get_window(), &w, &h);
 	glEnable(GL_SCISSOR_TEST);
 	glScissor(w / 2 - (1064 / 2), h / 2 - (600 / 2), 1064, 600);
 	glClearColor(159.0f / 255, 218.0f / 255, 242.0f / 255, 1.0f);
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	Game::process(delta);
 	Game::render();
 	
-	glfwSwapBuffers(engine.getWindow());
+	glfwSwapBuffers(engine.get_window());
     }
     Game::destroy();
     return 0;

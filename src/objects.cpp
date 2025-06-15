@@ -67,11 +67,6 @@ namespace Objects {
 	return;
     }
     
-    bool Sprite::isCollidingRect(Rectangle *p_rect) {
-	// return Physics::isAABBColliding(&self, &p_rect->self);
-	return false;
-    }
-    
     void Sprite::render(Shader *p_shader) {
 	Molson(_use)(p_shader);
 	
@@ -235,11 +230,6 @@ namespace Objects {
 	    std::cout << "[INFO]: Rectangle had been destroyed successfully. " << std::endl;
 	}
 	return;
-    }
-    
-    bool Rectangle::isCollidingRect(Rectangle *p_rect) {
-	// return Physics::isAABBColliding(&self, &p_rect->self);
-	return false;
     }
     
     void Rectangle::render(Shader *p_shader) {

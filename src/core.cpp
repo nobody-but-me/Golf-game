@@ -21,35 +21,19 @@
 
 namespace Core {
     
-    int *Application::getWindowHeight() {
-	return &HEIGHT;
-    }
-    int *Application::getWindowWidth() {
-	return &WIDTH;
-    }
-    Shader *Application::getMainShader() {
-	return &main_shader;
-    }
-    GLFWwindow *Application::getWindow() {
-	return window;
-    }
-    
-    bool Application::isKeyPressed(int p_key) {
+    bool Application::is_key_pressed(int p_key) {
 	int state = glfwGetKey(window, p_key);
 	if (state == GLFW_PRESS) {
 	    return true;
 	}
 	return false;
     }
-    bool Application::isKeyJustPressed(int p_key) {
+    bool Application::is_key_just_pressed(int p_key) {
 	int state = glfwGetKey(window, p_key);
 	if (state == GLFW_RELEASE) {
 	    return true;
 	}
 	return false;
-    }
-    bool Application::isRunning() {
-	return running;
     }
     
     static void window_resized_callback(GLFWwindow *window, int w, int h) {
@@ -62,7 +46,7 @@ namespace Core {
     glm::mat4 projection = glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
 
-    glm::mat4 *Application::getView() {
+    glm::mat4 *Application::get_view() {
 	return &view;
     }
     
@@ -146,10 +130,10 @@ namespace Core {
     
     std::vector<Objects::Rectangle*> level;
     
-    std::vector<Objects::Rectangle*> &Application::getLevel() {
+    std::vector<Objects::Rectangle*> &Application::get_level() {
 	return level;
     }
-    void Application::buildLevel(std::string p_level_path) {
+    void Application::build_level(std::string p_level_path) {
 	level.clear();
 	
 	int width, height, channels;
@@ -211,14 +195,14 @@ namespace Core {
 	return;
     }
     
-    void Application::renderLevel(Shader *p_shader) {
+    void Application::render_level(Shader *p_shader) {
 	for (int i = 0; i < (int)level.size(); i++) {
 	    level[i]->render(p_shader);
 	}
 	return;
     }
     
-    void Application::destroyLevel() {
+    void Application::destroy_level() {
 	for (int i = 0; i < (int)level.size(); i++) {
 	    delete level[i];
 	}

@@ -101,7 +101,7 @@ namespace PLAYER {
 	
 	engine = p_engine;
 	
-	player = new Objects::AnimatedSprite("PlayerSprite", "../assets/player/sprite_sheet.png", 35.0, 6.0, 6.0, sprite_index, true, false, engine->getMainShader());
+	player = new Objects::AnimatedSprite("PlayerSprite", "../assets/player/sprite_sheet.png", 35.0, 6.0, 6.0, sprite_index, true, false, engine->get_main_shader());
 	player_hitbox = new Objects::Rectangle("PlayerHitbox", false);
 	
 	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 0.0f);
@@ -126,10 +126,10 @@ namespace PLAYER {
 
     void Player::move(double delta) {
 	float direction = 0.0f;
-	if (engine->isKeyPressed(GOLF_D)) {
+	if (engine->is_key_pressed(GOLF_D)) {
 	    player->self.rotation.y = 0.0f;
 	    direction = 1.0f;
-	} else if (engine->isKeyPressed(GOLF_A)) {
+	} else if (engine->is_key_pressed(GOLF_A)) {
 	    player->self.rotation.y = 180.0f;
 	    direction = -1.0f;
 	}
@@ -151,8 +151,8 @@ namespace PLAYER {
 	bool on_collision = false;
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (Physics::isColliding(&FORECASTING_PLAYER.self, &level[i]->self) 
-		 && Physics::isHorizontallyAligned(&FORECASTING_PLAYER.self, &level[i]->self)) {
+		if (Physics::is_colliding(&FORECASTING_PLAYER.self, &level[i]->self) 
+		 && Physics::is_horizontally_aligned(&FORECASTING_PLAYER.self, &level[i]->self)) {
 		    // if (velocity.x > 0.0f) {
 		    if (FORECASTING_VELOCITY > 0.0f) {
 			player_hitbox->self.position.x = level[i]->self.position.x - player_hitbox->self.scale.x;
@@ -189,7 +189,7 @@ namespace PLAYER {
     }
     
     void Player::process(double delta) {
-	Molson(_set_int)("index", sprite_index, true, engine->getMainShader());
+	Molson(_set_int)("index", sprite_index, true, engine->get_main_shader());
 	
 	player->self.position = glm::vec3(player_hitbox->self.position.x - 2.5f, player_hitbox->self.position.y - 1.1f, player_hitbox->self.position.z + 0.5f);
 	
@@ -202,7 +202,7 @@ namespace PLAYER {
 	bool on_collision = false;
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (Physics::isColliding(&player_hitbox->self, &level[i]->self) && Physics::isVerticallyAligned(&player_hitbox->self, &level[i]->self)) {
+		if (Physics::is_colliding(&player_hitbox->self, &level[i]->self) && Physics::is_vertically_aligned(&player_hitbox->self, &level[i]->self)) {
 		    if (velocity.y > 0.0f) player_hitbox->self.position.y = level[i]->self.position.y - player_hitbox->self.scale.y;
 		    else if (velocity.y < 0.0f) {
 			player_hitbox->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
@@ -217,7 +217,7 @@ namespace PLAYER {
 	    velocity.y -= GRAVITY;
 	    is_on_floor = false;
 	} else {
-	    if (engine->isKeyPressed(GOLF_UP)) {
+	    if (engine->is_key_pressed(GOLF_UP)) {
 		velocity.y = JUMP_FORCE;
 	    }
 	}
@@ -225,8 +225,8 @@ namespace PLAYER {
     }
     
     void Player::render() {
-	player_hitbox->render(engine->getMainShader());
-	player->render(engine->getMainShader());
+	player_hitbox->render(engine->get_main_shader());
+	player->render(engine->get_main_shader());
 	return;
     }
 }
