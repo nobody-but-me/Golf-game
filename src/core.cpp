@@ -21,10 +21,10 @@
 
 namespace Core {
     
-    const int *Application::getWindowHeight() {
+    int *Application::getWindowHeight() {
 	return &HEIGHT;
     }
-    const int *Application::getWindowWidth() {
+    int *Application::getWindowWidth() {
 	return &WIDTH;
     }
     Shader *Application::getMainShader() {
@@ -54,7 +54,7 @@ namespace Core {
     
     static void window_resized_callback(GLFWwindow *window, int w, int h) {
 	glfwGetFramebufferSize(window, &w, &h);
-	glViewport(w / 2 - (1064 / 2), 0, 1064, 600);
+	glViewport(w / 2 - (1064 / 2), h / 2 - (600 / 2), 1064, 600);
 	return;
     }
     
@@ -113,6 +113,8 @@ namespace Core {
 	    return;
 	}
 	glfwSetFramebufferSizeCallback(window, window_resized_callback);
+	
+	glViewport(WIDTH / 2 - (1064 / 2), HEIGHT / 2 - (600 / 2), 1064, 600);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

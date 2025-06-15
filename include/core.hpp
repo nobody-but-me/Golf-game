@@ -59,18 +59,21 @@ namespace Core {
     
     class Application {
 	    private:
-	        const int WIDTH  = 1024;
-	        const int HEIGHT = 600;
+	        int WIDTH  = 1024;
+	        int HEIGHT = 600;
 		
 	        bool running = false;
 	        GLFWwindow *window;
 	        Shader main_shader;
 	    public:
-	        const int  *getWindowHeight();
-	        const int  *getWindowWidth();
+	        int        *getWindowHeight();
+	        int        *getWindowWidth();
 	        Shader     *getMainShader();
 	        GLFWwindow *getWindow();
 		glm::mat4  *getView();
+		
+	        int set_window_height();
+	        int set_window_width();
 
 	        bool isKeyPressed(int p_key);
 	        bool isKeyJustPressed(int p_key);
