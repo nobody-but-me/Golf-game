@@ -19,7 +19,7 @@ namespace PLAYER {
 	private:
 	    const float NORMAL_GRAVITY = 2.3f;
 	    const float ACCELERATION = 0.2;
-	    const float JUMP_FORCE = 40.0f;
+	    const float JUMP_FORCE = 43.0f;
 	    const float FRICTION = 0.07f;
 	    const float SPEED = 25.0f;
 	    
@@ -101,7 +101,7 @@ namespace PLAYER {
 	
 	engine = p_engine;
 	
-	player = new Objects::AnimatedSprite("PlayerSprite", "./assets/player/sprite_sheet.png", 35.0, 6.0, 6.0, sprite_index, true, false, engine->getMainShader());
+	player = new Objects::AnimatedSprite("PlayerSprite", "../assets/player/sprite_sheet.png", 35.0, 6.0, 6.0, sprite_index, true, false, engine->getMainShader());
 	player_hitbox = new Objects::Rectangle("PlayerHitbox", false);
 	
 	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 0.0f);

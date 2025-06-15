@@ -12,7 +12,6 @@
 #include "../include/objects.hpp"
 #define PLAYER_IMPLEMENTATION
 #include "../include/player.hpp"
-#include "../include/editor.hpp"
 #include "../include/game.hpp"
 #include "../include/core.hpp"
 
@@ -33,7 +32,7 @@ namespace Game {
     glm::mat4 view;
     
     void ready() {
-	engine->buildLevel("./assets/test-level.png");
+	engine->buildLevel("../assets/test-level.png");
 	level = engine->getLevel();
 	
 	view = *engine->getView();
@@ -47,7 +46,7 @@ namespace Game {
 	Molson(_set_matrix4)("view", &view, true, engine->getMainShader());
 	
 	if (engine->isKeyPressed(GOLF_R)) {
-	    engine->buildLevel("./assets/test-level.png");
+	    engine->buildLevel("../assets/test-level.png");
 	    level = engine->getLevel();
 	    player->level = level;
 	}

@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <vector>
 #include <string>
 #include <math.h>
 
@@ -14,9 +15,6 @@
 #include "../include/molson.h"
 #define MOLSON_IMPLEMENTATION
 
-#include "../include/nlohmann/json_fwd.hpp"
-#include "../include/nlohmann/json.hpp"
-using json = nlohmann::json;
 namespace Objects {
     
     Sprite::~Sprite() {

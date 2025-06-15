@@ -9,9 +9,6 @@
 
 #include "./molson.h"
 
-#include "./nlohmann/json_fwd.hpp"
-#include "./nlohmann/json.hpp"
-using json = nlohmann::json;
 namespace Objects {
     
     typedef struct Object {

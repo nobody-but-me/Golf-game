@@ -9,7 +9,6 @@
 #include "../include/objects.hpp"
 #include "../include/stb_image.h"
 #define EDITOR_IMPLEMENTATION
-#include "../include/editor.hpp"
 #include "../include/core.hpp"
 #include "../include/game.hpp"
 #define MOLSON_IMPLEMENTATION
@@ -19,9 +18,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
 
-#include <backends/imgui_impl_opengl3.h>
-#include <backends/imgui_impl_glfw.h>
-#include <imgui.h>
 
 namespace Core {
     
@@ -78,26 +74,26 @@ namespace Core {
 	// Decide GL+GLSL versions
 	#if defined(IMGUI_IMPL_OPENGL_ES2)
 	// GL ES 2.0 + GLSL 100 (WebGL 1.0)
-	const char* glsl_version = "#version 100";
+	// const char* glsl_version = "#version 100";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 	#elif defined(IMGUI_IMPL_OPENGL_ES3)
 	// GL ES 3.0 + GLSL 300 es (WebGL 2.0)
-	const char* glsl_version = "#version 300 es";
+	// const char* glsl_version = "#version 300 es";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 	#elif defined(__APPLE__)
 	// GL 3.2 + GLSL 150
-	const char* glsl_version = "#version 150";
+	// const char* glsl_version = "#version 150";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
 	#else
 	// GL 3.0 + GLSL 130
-	const char* glsl_version = "#version 130";
+	// const char* glsl_version = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
@@ -121,9 +117,7 @@ namespace Core {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	Editor::init(glsl_version, window);
-	
-	Molson(_init_shader)("./shaders/object.vert", "./shaders/object.frag", &main_shader);
+	Molson(_init_shader)("../shaders/object.vert", "../shaders/object.frag", &main_shader);
 	
 	view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -50.0f));
 	projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
@@ -139,8 +133,7 @@ namespace Core {
     }
     Application::~Application() {
 	running = false;
-
-	Editor::destroy();
+	
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	std::cout << "\n[INFO]: Application destroyed. \n" << std::endl;

@@ -6,19 +6,13 @@
 
 #include "../include/core.hpp"
 
-#include "../include/editor.hpp"
 #include "../include/game.hpp"
 #include "../include/molson.h"
-
-#include <imgui.h>
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
 
 
 int main(int argc, char *argv[]) {
     Core::Application engine("Golfine << DEBUG");
     
-    Editor::set_application(&engine);
     Game::set_application(&engine);
     
     // TODO: change the place of this delta time logic.
@@ -40,7 +34,6 @@ int main(int argc, char *argv[]) {
 	
 	Game::process(delta);
 	Game::render();
-	Editor::process(delta);
 	
 	glfwSwapBuffers(engine.getWindow());
     }

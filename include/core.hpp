@@ -46,6 +46,8 @@ enum KEYCODES {
     GOLF_Z = GLFW_KEY_Z
 };
 
+#include <vector>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
