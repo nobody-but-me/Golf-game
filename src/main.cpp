@@ -14,11 +14,12 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
+
 int main(int argc, char *argv[]) {
     Core::Application engine("Golfine << DEBUG");
     
-    Editor::setApplication(&engine);
-    Game::setApplication(&engine);
+    Editor::set_application(&engine);
+    Game::set_application(&engine);
     
     // TODO: change the place of this delta time logic.
     double last_time = glfwGetTime();

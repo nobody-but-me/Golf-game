@@ -8,11 +8,8 @@
 
 namespace Game {
     
-    Objects::Rectangle *getPlayerHitbox();
-    int *getPlayerSpriteIndex();
-    
     void input(GLFWwindow *p_window, int key, int scancode, int action, int mods);
-    void setApplication(Core::Application *p_engine);
+    void set_application(Core::Application *p_engine);
     void process(double delta);
     void render();
     void ready();

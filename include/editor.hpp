@@ -3,11 +3,13 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
+#include <vector>
+
 #include <GLFW/glfw3.h>
 #include "./core.hpp"
 
 namespace Editor {
-    void setApplication(Core::Application *p_engine);
+    void set_application(Core::Application *p_engine);
 
     void process(float delta);
     void destroy();
@@ -16,6 +18,8 @@ namespace Editor {
 
 #endif//EDITOR_H
 #ifdef  EDITOR_IMPLEMENTATION
+
+#include <vector>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -35,7 +39,10 @@ namespace Editor {
     
     Core::Application *engine;
     
-    void setApplication(Core::Application *p_engine) {
+    std::vector<float> player_float_variables;
+    std::vector<int>   player_int_variables;
+    
+    void set_application(Core::Application *p_engine) {
         engine = p_engine;
     }
     
@@ -45,13 +52,6 @@ namespace Editor {
 	ImGui::NewFrame();
 	
 	ImGui::Begin("Player");
-	
-	ImGui::SliderFloat("Position X", &Game::getPlayerHitbox()->self.position.x, -200.0f, 200.0f);
-	ImGui::SliderFloat("Position Y", &Game::getPlayerHitbox()->self.position.y, -200.0f, 200.0f);
-	ImGui::SliderFloat("Position Z", &Game::getPlayerHitbox()->self.position.z, -200.0f, 200.0f);
-	
-	ImGui::SliderInt("Sprite Index", Game::getPlayerSpriteIndex(), 0, 35);
-	
 	ImGui::End();
 
 	ImGui::Render();

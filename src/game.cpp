@@ -12,6 +12,7 @@
 #include "../include/objects.hpp"
 #define PLAYER_IMPLEMENTATION
 #include "../include/player.hpp"
+#include "../include/editor.hpp"
 #include "../include/game.hpp"
 #include "../include/core.hpp"
 
@@ -20,20 +21,12 @@ namespace Game {
     Core::Application *engine;
     std::vector<Objects::Rectangle*> level;
     
-    void setApplication(Core::Application *p_engine) {
+    PLAYER::Player *player;
+    
+    void set_application(Core::Application *p_engine) {
 	engine = p_engine;
 	return;
     }
-    
-    PLAYER::Player *player;
-    // TODO: take these functions out of here. This annoys me.
-    Objects::Rectangle *getPlayerHitbox() {
-	return player->player_hitbox;
-    }
-    int *getPlayerSpriteIndex() {
-	return player->getSpriteIndex();
-    }
-    
     
     glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 camera_up = glm::vec3(0.0f, 1.0f, 1.0f);

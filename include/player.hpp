@@ -21,7 +21,7 @@ namespace PLAYER {
 	    const float ACCELERATION = 0.2;
 	    const float JUMP_FORCE = 40.0f;
 	    const float FRICTION = 0.07f;
-	    const float SPEED = 23.0f;
+	    const float SPEED = 25.0f;
 	    
 	    float GRAVITY = NORMAL_GRAVITY;
 	    bool is_on_ceiling = false;
@@ -33,6 +33,7 @@ namespace PLAYER {
 	    
 	    glm::vec2 velocity = glm::vec2(0.0f, 0.0f);
 	public:
+	    
 	    int *getSpriteIndex() {
 		return &sprite_index;
 	    }
@@ -147,6 +148,7 @@ namespace PLAYER {
 	}
 	FORECASTING_PLAYER.self.position.x += FORECASTING_VELOCITY * delta;
 	
+	bool on_collision = false;
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
 		if (Physics::isColliding(&FORECASTING_PLAYER.self, &level[i]->self) 
@@ -160,25 +162,28 @@ namespace PLAYER {
 			player_hitbox->self.position.x = level[i]->self.position.x + level[i]->self.scale.x;
 			velocity.x = 0.0f;
 		    }
-		    return;
+		    on_collision = true;
 		}
 	    }
 	}
-	velocity.x = FORECASTING_VELOCITY;
 	
-	if (velocity.y < -3.0f || velocity.y > 3.0f) {
-	    if (velocity.y > 0.0f) {
-		if (!animations[2]->played) {
-		    animations[2]->play();
+	if (!on_collision) {
+	    velocity.x = FORECASTING_VELOCITY;
+	    
+	    if (velocity.y < -3.0f || velocity.y > 3.0f) {
+		if (velocity.y > 0.0f) {
+		    if (!animations[2]->played) {
+			animations[2]->play();
+		    }
+		} else {
+		    if (!animations[3]->played) {
+			animations[3]->play();
+		    }
 		}
 	    } else {
-		if (!animations[3]->played) {
-		    animations[3]->play();
-		}
+		animations[2]->played = false;
+		animations[3]->played = false;
 	    }
-	} else {
-	    animations[2]->played = false;
-	    animations[3]->played = false;
 	}
 	return;
     }
@@ -194,27 +199,28 @@ namespace PLAYER {
 	player_hitbox->self.position.y += velocity.y * delta;
 	
 	// // this reminds me of the good game maker times...
+	bool on_collision = false;
 	for (int i = 0; i < (int)level.size(); i++) {
 	    if (level[i]->name == "block") {
-		if (Physics::isColliding(&player_hitbox->self, &level[i]->self) && 
-		    Physics::isVerticallyAligned(&player_hitbox->self, &level[i]->self)
-		    ) {
+		if (Physics::isColliding(&player_hitbox->self, &level[i]->self) && Physics::isVerticallyAligned(&player_hitbox->self, &level[i]->self)) {
 		    if (velocity.y > 0.0f) player_hitbox->self.position.y = level[i]->self.position.y - player_hitbox->self.scale.y;
 		    else if (velocity.y < 0.0f) {
 			player_hitbox->self.position.y = level[i]->self.position.y + level[i]->self.scale.y;
 			is_on_floor = true;
 		    }
 		    velocity.y = 0.0f;
-		    
-		    if (engine->isKeyPressed(GOLF_UP)) {
-			velocity.y = JUMP_FORCE;
-		    }
-		    return;
+		    on_collision = true;
 		}
 	    }
 	}
-	velocity.y -= GRAVITY;
-	is_on_floor = false;
+	if (!on_collision) {
+	    velocity.y -= GRAVITY;
+	    is_on_floor = false;
+	} else {
+	    if (engine->isKeyPressed(GOLF_UP)) {
+		velocity.y = JUMP_FORCE;
+	    }
+	}
 	return;
     }
     
