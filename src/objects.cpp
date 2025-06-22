@@ -105,7 +105,7 @@ namespace Objects {
 	glDeleteBuffers(1, &self.ebo);
 	
 	if (verbose == true) {
-	    std::cout << "[INFO]: Sprite had been destroyed successfully. " << std::endl;
+	    std::cout << "[INFO]: AnimatedSprite had been destroyed successfully. " << std::endl;
 	}
 	return;
     }
@@ -147,14 +147,14 @@ namespace Objects {
 	sprite_index = p_sprite_index;
 	sprite_rows = p_sprite_rows;
 	
-	Molson(_set_int)("SPRITE_COLUMNS", p_sprite_columns, true, p_shader);
-	Molson(_set_int)("SPRITE_FRAMES", p_sprite_frames, true, p_shader);
-	Molson(_set_int)("SPRITE_ROWS", p_sprite_rows, true, p_shader);
+	// Molson(_set_int)("SPRITE_COLUMNS", p_sprite_columns, true, p_shader);
+	// Molson(_set_int)("SPRITE_FRAMES", p_sprite_frames, true, p_shader);
+	// Molson(_set_int)("SPRITE_ROWS", p_sprite_rows, true, p_shader);
 	Molson(_set_int)("index", p_sprite_index, true, p_shader);
 	
 	initialized = 1;
 	if (verbose == true) {
-	    std::cout << "[INFO]: Sprite " << name << " had been created." << std::endl;
+	    std::cout << "[INFO]: AnimatedSprite " << name << " had been created." << std::endl;
 	}
 	return;
     }
@@ -175,8 +175,13 @@ namespace Objects {
 	
 	Molson(_set_matrix4)("transform", &transform, false, p_shader);
 	Molson(_set_vector4_f)("color", self.color / 255.0f, false, p_shader);
+	
 	Molson(_set_bool)("is_textured", true, p_shader);
 	Molson(_set_bool)("is_animated", true, p_shader);
+	
+	// Molson(_set_int)("SPRITE_COLUMNS", sprite_columns, true, p_shader);
+	// Molson(_set_int)("SPRITE_FRAMES", sprite_frames, true, p_shader);
+	// Molson(_set_int)("SPRITE_ROWS", sprite_rows, true, p_shader);
 	
 	if (texture_path != "") {
 	    glActiveTexture(GL_TEXTURE0);

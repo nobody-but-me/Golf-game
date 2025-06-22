@@ -18,12 +18,14 @@ namespace PLAYER {
     class Player {
 	private:
 	    const float NORMAL_GRAVITY = 2.3f;
+
 	    const float ACCELERATION = 0.2;
 	    const float JUMP_FORCE = 43.0f;
 	    const float FRICTION = 0.07f;
-	    const float SPEED = 25.0f;
 	    
 	    float GRAVITY = NORMAL_GRAVITY;
+	    float SPEED = 25.0f;
+	    
 	    bool is_on_ceiling = false;
 	    bool is_on_floor = false;
 	    bool is_on_wall = false;
@@ -101,12 +103,12 @@ namespace PLAYER {
 	
 	engine = p_engine;
 	
-	player = new Objects::AnimatedSprite("PlayerSprite", "../assets/player/sprite_sheet.png", 35.0, 6.0, 6.0, sprite_index, true, false, engine->get_main_shader());
+	player = new Objects::AnimatedSprite("PlayerSprite", "../assets/player/sprite_sheet.png", 36.0f, 6.0f, 6.0f, sprite_index, true, false, engine->get_main_shader());
 	player_hitbox = new Objects::Rectangle("PlayerHitbox", false);
 	
-	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 0.0f);
+	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 173.5f);
 	player_hitbox->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	player_hitbox->self.position = glm::vec3(-2.0f, 62.0f, -1.0f);
+	player_hitbox->self.position = glm::vec3(-3.0f, 62.0f, -1.0f);
 	player_hitbox->self.scale = glm::vec2(3.0f, 6.0f);
 	
 	player->self.color = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
@@ -126,10 +128,14 @@ namespace PLAYER {
 
     void Player::move(double delta) {
 	float direction = 0.0f;
-	if (engine->is_key_pressed(GOLF_D)) {
+	
+	int ax;
+	const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &ax);
+	
+	if (engine->is_key_pressed(GOLF_D) || *axes == 1) {
 	    player->self.rotation.y = 0.0f;
 	    direction = 1.0f;
-	} else if (engine->is_key_pressed(GOLF_A)) {
+	} else if (engine->is_key_pressed(GOLF_A) || *axes == -1) {
 	    player->self.rotation.y = 180.0f;
 	    direction = -1.0f;
 	}
@@ -141,10 +147,14 @@ namespace PLAYER {
 	float FORECASTING_VELOCITY;
 	if (direction == 1.0f || direction == -1.0f) {
 	    FORECASTING_VELOCITY = Math::lerp(velocity.x, SPEED * direction, ACCELERATION);
-	    if (is_on_floor) animations[1]->play(); else animations[1]->stop(); // walk animation
+	    if (is_on_floor) {
+		animations[1]->play();
+	    } else animations[1]->stop(); // walk animation
 	} else if (direction == 0.0f) {
 	    FORECASTING_VELOCITY = Math::lerp(velocity.x, 0.0f, FRICTION);
-	    if (is_on_floor) animations[0]->play(); else animations[0]->stop(); // idle animation
+	    if (is_on_floor) {
+		animations[0]->play();
+	    } else animations[0]->stop(); // idle animation
 	}
 	FORECASTING_PLAYER.self.position.x += FORECASTING_VELOCITY * delta;
 	
@@ -189,7 +199,6 @@ namespace PLAYER {
     }
     
     void Player::process(double delta) {
-	Molson(_set_int)("index", sprite_index, true, engine->get_main_shader());
 	
 	player->self.position = glm::vec3(player_hitbox->self.position.x - 2.5f, player_hitbox->self.position.y - 1.1f, player_hitbox->self.position.z + 0.5f);
 	
@@ -213,19 +222,29 @@ namespace PLAYER {
 		}
 	    }
 	}
+	
+	GLFWgamepadstate state;
+	glfwGetGamepadState(GLFW_JOYSTICK_1, &state);
+	
 	if (!on_collision) {
 	    velocity.y -= GRAVITY;
 	    is_on_floor = false;
 	} else {
-	    if (engine->is_key_pressed(GOLF_UP)) {
-		velocity.y = JUMP_FORCE;
+	    if (engine->is_key_pressed(GOLF_UP) || state.buttons[GLFW_GAMEPAD_BUTTON_A]) {
+		if (is_on_floor) {
+		    velocity.y = JUMP_FORCE;
+		}
 	    }
 	}
 	return;
     }
     
     void Player::render() {
-	player_hitbox->render(engine->get_main_shader());
+	Molson(_set_int)("index", sprite_index, true, engine->get_main_shader());
+	Molson(_set_int)("SPRITE_COLUMNS", player->sprite_columns, true, engine->get_main_shader());
+	Molson(_set_int)("SPRITE_FRAMES", player->sprite_frames, true, engine->get_main_shader());
+	Molson(_set_int)("SPRITE_ROWS", player->sprite_rows, true, engine->get_main_shader());
+	// player_hitbox->render(engine->get_main_shader());
 	player->render(engine->get_main_shader());
 	return;
     }

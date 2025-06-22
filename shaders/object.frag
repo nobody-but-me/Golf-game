@@ -2,13 +2,13 @@
 #version 330 core
 
 in vec2 texture_coords;
+
 out vec4 object_color;
 
 uniform sampler2D object_image;
 uniform bool is_textured;
 uniform bool is_animated;
 uniform vec4 color;
-
 
 uniform int SPRITE_COLUMNS;
 uniform int SPRITES_FRAMES;

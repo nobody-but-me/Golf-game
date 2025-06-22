@@ -32,13 +32,14 @@ namespace Game {
     glm::mat4 view;
     
     void ready() {
-	engine->build_level("../assets/test-level.png");
+	glm::vec3 pp = engine->build_level("../assets/test-level.png", "../assets/test-level-tiles.png");
 	level = engine->get_level();
 	
 	view = *engine->get_view();
 	
 	player = new PLAYER::Player(engine);
 	player->level = level;
+	player->player_hitbox->self.position = pp;
     }
     
     void process(double delta) {
@@ -46,9 +47,11 @@ namespace Game {
 	Molson(_set_matrix4)("view", &view, true, engine->get_main_shader());
 	
 	if (engine->is_key_pressed(GOLF_R)) {
-	    engine->build_level("../assets/test-level.png");
+	    glm::vec3 pp = engine->build_level("../assets/test-level.png", "../assets/test-level-tiles.png");
 	    level = engine->get_level();
+	    
 	    player->level = level;
+	    player->player_hitbox->self.position = pp;
 	}
 	
 	player->process(delta);

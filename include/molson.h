@@ -150,7 +150,7 @@ Texture Molson(_load_texture)(const char *_file_path, bool _alpha) {
     stbi_image_free(_data);
     
     _new_texture.path = _file_path;
-    printf("[INFO]: Texture had been loaded successfully. \n");
+    // printf("[INFO]: Texture had been loaded successfully. \n");
     return _new_texture;
 }
 
