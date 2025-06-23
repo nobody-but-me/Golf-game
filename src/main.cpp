@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     glfwSetKeyCallback(engine.get_window(), Game::input);
     Game::ready();
     while (!glfwWindowShouldClose(engine.get_window())) {
-	if (engine.is_key_pressed(GOLF_ESCAPE)) {
+	if (Core::Input::is_key_pressed(engine.get_window(), GOLF_ESCAPE)) {
 	    break;
 	}
 	glfwPollEvents();

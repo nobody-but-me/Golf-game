@@ -21,19 +21,46 @@
 
 namespace Core {
     
-    bool Application::is_key_pressed(int p_key) {
-	int state = glfwGetKey(window, p_key);
-	if (state == GLFW_PRESS) {
-	    return true;
+    namespace Input {
+	std::vector<float> get_left_axes(int p_controler) {
+	    GLFWgamepadstate state;
+	    if (glfwGetGamepadState(p_controler, &state)) {
+		float x = state.axes[GLFW_GAMEPAD_AXIS_LEFT_X];
+		float y = state.axes[GLFW_GAMEPAD_AXIS_LEFT_Y];
+		
+		std::vector<float> left_axes;
+		left_axes.push_back(x);
+		left_axes.push_back(y);
+		return left_axes;
+	    }
+	    std::vector<float> zero;
+	    zero.push_back(0.0f);
+	    zero.push_back(0.0f);
+	    return zero;
 	}
-	return false;
-    }
-    bool Application::is_key_just_pressed(int p_key) {
-	int state = glfwGetKey(window, p_key);
-	if (state == GLFW_RELEASE) {
-	    return true;
+	std::vector<float> get_right_axes(int p_controler) {
+	    GLFWgamepadstate state;
+	    if (glfwGetGamepadState(p_controler, &state)) {
+		float x = state.axes[GLFW_GAMEPAD_AXIS_RIGHT_X];
+		float y = state.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y];
+		
+		std::vector<float> right_axes;
+		right_axes.push_back(x);
+		right_axes.push_back(y);
+		return right_axes;
+	    }
+	    std::vector<float> zero;
+	    zero.push_back(0.0f);
+	    zero.push_back(0.0f);
+	    return zero;
 	}
-	return false;
+	bool is_key_pressed(GLFWwindow *window, int p_key) {
+	    int state = glfwGetKey(window, p_key);
+	    if (state == GLFW_PRESS) {
+		return true;
+	    }
+	    return false;
+	}
     }
     
     static void window_resized_callback(GLFWwindow *window, int w, int h) {
@@ -139,7 +166,7 @@ namespace Core {
     }
 
     // --------------------------------------------------
-    // For my family: sorry for the future code, I regret it.
+    // For my family: sorry for the code below, I regret it.
     
     std::vector<Objects::AnimatedSprite*> level_tiles;
     std::vector<Objects::Rectangle*> level;

@@ -57,6 +57,12 @@ enum KEYCODES {
 
 namespace Core {
     
+    namespace Input {
+	bool is_key_pressed(GLFWwindow *window, int p_key);
+	std::vector<float> get_right_axes(int p_controler);
+	std::vector<float> get_left_axes(int p_controler);
+    }
+    
     class Application {
 	    private:
 	        int WIDTH  = 1024;
@@ -86,9 +92,6 @@ namespace Core {
 	        int set_window_height();
 	        int set_window_width();
 		glm::mat4  *get_view();
-
-	        bool is_key_just_pressed(int p_key);
-	        bool is_key_pressed(int p_key);
 
 	        std::vector<Objects::Rectangle*> &get_level();
 	        glm::vec3 build_level(std::string p_level_path, std::string p_level_tiles_path);

@@ -44,9 +44,10 @@ namespace Game {
     
     void process(double delta) {
 	view = glm::lookAt(glm::vec3(player->player_hitbox->self.position.x, player->player_hitbox->self.position.y + 5.0f, 50.0f), glm::vec3(player->player_hitbox->self.position.x, player->player_hitbox->self.position.y + 5.0f, 50.0f) + camera_front, camera_up);
+	
 	Molson(_set_matrix4)("view", &view, true, engine->get_main_shader());
 	
-	if (engine->is_key_pressed(GOLF_R)) {
+	if (Core::Input::is_key_pressed(engine->get_window(), GOLF_R)) {
 	    glm::vec3 pp = engine->build_level("../assets/test-level.png", "../assets/test-level-tiles.png");
 	    level = engine->get_level();
 	    
