@@ -54,10 +54,18 @@ namespace Core {
 	    zero.push_back(0.0f);
 	    return zero;
 	}
+	
 	bool is_key_pressed(GLFWwindow *window, int p_key) {
 	    int state = glfwGetKey(window, p_key);
 	    if (state == GLFW_PRESS) {
 		return true;
+	    }
+	    return false;
+	}
+	bool is_joystick_button_pressed(unsigned int p_joystick, unsigned int p_button) {
+	    GLFWgamepadstate state;
+	    if (glfwGetGamepadState(p_joystick, &state)) {
+		return state.buttons[p_button];
 	    }
 	    return false;
 	}

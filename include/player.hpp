@@ -129,8 +129,6 @@ namespace PLAYER {
     void Player::move(double delta) {
 	float direction = 0.0f;
 	
-	// int ax;
-	// const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &ax);
 	std::vector<float> left_joystick = Core::Input::get_left_axes(GLFW_JOYSTICK_1);
 	
 	if (Core::Input::is_key_pressed(engine->get_window(), GOLF_D) || left_joystick[0] == 1) {
@@ -224,14 +222,11 @@ namespace PLAYER {
 	    }
 	}
 	
-	GLFWgamepadstate state;
-	glfwGetGamepadState(GLFW_JOYSTICK_1, &state);
-	
 	if (!on_collision) {
 	    velocity.y -= GRAVITY;
 	    is_on_floor = false;
 	} else {
-	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_UP) || state.buttons[GLFW_GAMEPAD_BUTTON_A]) {
+	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_UP) || Core::Input::is_joystick_button_pressed(GLFW_JOYSTICK_1, GLFW_GAMEPAD_BUTTON_A)) {
 		if (is_on_floor) {
 		    velocity.y = JUMP_FORCE;
 		}

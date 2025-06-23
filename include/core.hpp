@@ -58,6 +58,7 @@ enum KEYCODES {
 namespace Core {
     
     namespace Input {
+	bool is_joystick_button_pressed(unsigned int p_joystick, unsigned int p_button);
 	bool is_key_pressed(GLFWwindow *window, int p_key);
 	std::vector<float> get_right_axes(int p_controler);
 	std::vector<float> get_left_axes(int p_controler);
