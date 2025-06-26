@@ -94,7 +94,7 @@ namespace Core {
 	        int set_window_width();
 		glm::mat4  *get_view();
 
-	        std::vector<Objects::Rectangle*> &get_level();
+	        std::vector<Objects::AnimatedSprite*> &get_level();
 	        glm::vec3 build_level(std::string p_level_path, std::string p_level_tiles_path);
 	        void render_level(Shader *p_shader);
 	        void destroy_level();

@@ -18,6 +18,7 @@ namespace PLAYER {
     class Player {
 	private:
 	    const float NORMAL_GRAVITY = 2.3f;
+	    // const float NORMAL_GRAVITY = 0.f;
 
 	    const float ACCELERATION = 0.2;
 	    const float JUMP_FORCE = 43.0f;
@@ -40,7 +41,7 @@ namespace PLAYER {
 		return &sprite_index;
 	    }
 	    
-	    std::vector<Objects::Rectangle*> level;
+	    std::vector<Objects::AnimatedSprite*> level;
 	    Objects::Rectangle *player_hitbox;
 	    Objects::AnimatedSprite *player;
 	    Core::Application *engine;

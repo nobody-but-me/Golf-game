@@ -17,8 +17,8 @@
 
 namespace Game {
     
+    std::vector<Objects::AnimatedSprite*> level;
     Core::Application *engine;
-    std::vector<Objects::Rectangle*> level;
     
     PLAYER::Player *player;
     
