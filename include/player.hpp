@@ -28,15 +28,15 @@ namespace PLAYER {
 	    float SPEED = 25.0f;
 	    
 	    bool is_on_ceiling = false;
-	    bool is_on_floor = false;
-	    bool is_on_wall = false;
-	    bool is_on_roll = false;
-	    int sprite_index = 0;
+	    bool is_on_floor   = false;
+	    bool is_on_wall    = false;
+	    bool is_on_roll    = false;
+	    int sprite_index   = 0;
 	    
 	    std::vector<Animator::Animation*> animations;
 	    
-	    glm::vec2 velocity = glm::vec2(0.0f, 0.0f);
 	public:
+	    glm::vec2 velocity = glm::vec2(0.0f, 0.0f);
 	    
 	    int *getSpriteIndex() {
 		return &sprite_index;
@@ -51,6 +51,7 @@ namespace PLAYER {
 	    ~Player();
 	    
 	    void process(double delta);
+	    void animation_manager();
 	    void move(double delta);
 	    void render();
 	    
@@ -115,7 +116,8 @@ namespace PLAYER {
 	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 173.5f);
 	player_hitbox->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	player_hitbox->self.position = glm::vec3(-3.0f, 62.0f, -1.0f);
-	player_hitbox->self.scale = glm::vec2(3.0f, 6.0f);
+	// player_hitbox->self.scale = glm::vec2(3.0f, 6.0f);
+	player_hitbox->self.scale = glm::vec2(3.0f, 4.0f);
 	
 	player->self.color = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
 	player->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -138,9 +140,8 @@ namespace PLAYER {
 	std::vector<float> left_joystick = Core::Input::get_left_axes(GOLF_MAIN_JOY);
 	
 	if (is_on_roll == false) {
-	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_LEFT_SHIFT)) {
-		animations[0]->stop();
-		animations[1]->stop();
+	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_LEFT_SHIFT) || Core::Input::is_joystick_button_pressed(GOLF_MAIN_JOY, GOLF_JOY_BUTTON_B)) {
+		// player_hitbox->self.scale.y = 1.0f;
 		is_on_roll = true;
 	    }
 	    
@@ -162,15 +163,9 @@ namespace PLAYER {
 	if (is_on_roll == false) {
 	    if (direction == 1.0f || direction == -1.0f) {
 		FORECASTING_VELOCITY = Math::lerp(velocity.x, SPEED * direction, ACCELERATION);
-		if (is_on_floor) {
-		    animations[1]->play();
-		} else animations[1]->stop(); // walk animation
 	    }
 	    else if (direction == 0.0f) {
 		FORECASTING_VELOCITY = Math::lerp(velocity.x, 0.0f, FRICTION);
-		if (is_on_floor) {
-		    animations[0]->play();
-		} else animations[0]->stop(); // idle animation
 	    }
 	} else FORECASTING_VELOCITY = velocity.x;
 	FORECASTING_PLAYER.self.position.x += FORECASTING_VELOCITY * delta;
@@ -194,46 +189,57 @@ namespace PLAYER {
 	    }
 	}
 	
-	// TODO: find a better way to manage these states;
 	if (!on_collision) {
 	    velocity.x = FORECASTING_VELOCITY;
-	    
-	    if (velocity.y < -3.0f || velocity.y > 3.0f) {
-		if (velocity.y > 0.0f) {
-		    if (!animations[2]->played) {
-			animations[2]->play();
-		    }
-		} else {
-		    if (!animations[3]->played) {
-			animations[3]->play();
-		    }
-		}
-	    } else {
-		animations[2]->played = false;
-		animations[3]->played = false;
-	    }
 	}
 	return;
+    }
+    
+    void Player::animation_manager() {
+	// TODO: find a better way to manage these states;
+	if (is_on_roll == false) {
+	    if (is_on_floor == true) {
+		if (velocity.x >= 10.0f || velocity.x <= -10.0f) animations[1]->play();
+		else                                             animations[0]->play();
+	    } else {
+		animations[0]->stop();
+		animations[1]->stop();
+		if (velocity.y > 5.0f || velocity.y < -5.0f) {
+		    if (velocity.y > 10.0f) {
+			if (!animations[2]->played) {
+			    animations[2]->play();
+			}
+		    } else if (velocity.y < -10.0f) {
+			if (!animations[3]->played) {
+			    animations[3]->play();
+			}
+		    }
+		} else {
+		    animations[2]->played = false;
+		    animations[3]->played = false;
+		}
+	    }
+	} else {
+	    animations[0]->stop();
+	    animations[1]->stop();
+	    animations[2]->stop();
+	    animations[3]->stop();
+	    
+	    if (animations[4]->played == false) {
+		animations[4]->play();
+	    } else {
+		animations[4]->played = false;
+		is_on_roll = false;
+	    }
+	}
     }
     
     void Player::process(double delta) {
 	player->self.position = glm::vec3(player_hitbox->self.position.x - 2.5f, player_hitbox->self.position.y - 1.1f, player_hitbox->self.position.z + 0.5f);
 	
-	// TODO: find a better way to manage these states;
 	if (is_on_roll == true) {
-	    animations[2]->stop();
-	    animations[3]->stop();
-	    animations[4]->play();
-	    
 	    if (player->self.rotation.y == 180.0f) velocity.x = -35.0f;
 	    else velocity.x = 35.0f;
-	}
-	
-	if (animations[4]->played == true) {
-	    animations[4]->stop();
-	    is_on_roll = false;
-	    
-	    animations[4]->played = false;
 	}
 	
 	move(delta);
@@ -264,11 +270,10 @@ namespace PLAYER {
 	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_UP) || Core::Input::is_joystick_button_pressed(GOLF_MAIN_JOY, GOLF_JOY_BUTTON_A)) {
 		if (is_on_floor) {
 		    velocity.y = JUMP_FORCE;
-		    animations[4]->stop();
-		    is_on_roll = false;
 		}
 	    }
 	}
+	animation_manager();
 	return;
     }
     
@@ -277,7 +282,7 @@ namespace PLAYER {
 	Molson(_set_int)("SPRITE_FRAMES", player->sprite_frames, true, engine->get_main_shader());
 	Molson(_set_int)("SPRITE_ROWS", player->sprite_rows, true, engine->get_main_shader());
 	Molson(_set_int)("index", sprite_index, true, engine->get_main_shader());
-	// player_hitbox->render(engine->get_main_shader());
+	player_hitbox->render(engine->get_main_shader());
 	player->render(engine->get_main_shader());
 	return;
     }

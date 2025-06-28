@@ -53,6 +53,7 @@ namespace Game {
 	    
 	    player->level = level;
 	    player->player_hitbox->self.position = pp;
+	    player->velocity = glm::vec2(0.0f, 0.0f);
 	}
 	
 	player->process(delta);

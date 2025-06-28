@@ -57,7 +57,7 @@ namespace Animator {
 	
 	// I am almost sure this is the uglier code I've ever written.
 	if (is_playing) {
-	    if (loop) {
+	    if (loop == true) {
 		if (delay < delay_length) {
 		    delay++;
 		} else {
@@ -88,11 +88,6 @@ namespace Animator {
 		}
 	    }
 	}
-	// if (loop == true) {
-	//     if (is_playing) {
-	//     }
-	// } else {
-	// }
 	return;
     }
 }
