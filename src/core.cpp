@@ -211,24 +211,6 @@ namespace Core {
 			str = "";
 			continue;
 		    }
-		    // while (line[i] != ' ') {
-		    // 	str += line[i];
-		    // 	++i;
-		    // }
-		    // l.push_back(str);
-		    // if (std::isdigit(line[i]))
-		    // {
-		    // 	last_digit += line[i];
-		    // 	// l.push_back(digit);
-		    // } 
-		    // else if (line[i] == 'P') l.push_back('P');
-		    // else {
-		    // 	if (last_digit != ' ') {
-		    // 	    l.push_back(last_digit);
-		    // 	    std::cout << last_digit << std::endl;
-		    // 	    last_digit = ' ';
-		    // 	}
-		    // }
 		}
 		base.push_back(l);
 	    }
@@ -246,7 +228,7 @@ namespace Core {
 	glm::vec3 player_position;
 	for (int y = 0; y < static_cast<int>(bases.size()); ++y) {
 	    for (int x = 0; x < static_cast<int>(bases[0].size()); ++x) {
-		if (bases[y][x] == "V") continue;
+		if (bases[y][x] == "E") continue;
 		else if (bases[y][x] == "P") {
 		    player_position = glm::vec3((x * 3.0f) - static_cast<int>(bases[0].size()) / 2, y * 3.0f, 0.0f);
 		    continue;
@@ -254,15 +236,32 @@ namespace Core {
 		Objects::AnimatedSprite *tile = new Objects::AnimatedSprite("block", "../assets/tiles.png", 36.0f, 6.0f, 6.0f, 10, true, false, &main_shader);
 		tile->self.color = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
 		tile->self.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-		tile->self.scale = glm::vec2(3.0f, 3.0f);
 		
+		tile->self.scale = glm::vec2(3.0f, 3.0f);
 		tile->self.position = glm::vec3((x * tile->self.scale.x) - static_cast<int>(bases[0].size()) / 2, (y * tile->self.scale.y) * -1, 0.0f);
 		
 		tile->sprite_index = atoi(bases[y][x].c_str());
+		switch (atoi(bases[y][x].c_str())) {
+		    case 4:
+		    case 5:
+		    case 11:
+		    case 13:
+		    case 16:
+		    case 17:
+		    case 22:
+		    case 23:
+		    case 27:
+		    case 29:
+		    case 34:
+		    case 35: {
+			tile->name = "non-collidable-block"; // search for a better name;
+		    } break;
+		}
 		level.push_back(tile);
 	    }
 	}
 	std::cout << "[INFO] level had been built. \n";
+
 	return player_position;
     }
     

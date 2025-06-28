@@ -30,6 +30,7 @@ namespace PLAYER {
 	    bool is_on_ceiling = false;
 	    bool is_on_floor = false;
 	    bool is_on_wall = false;
+	    bool is_on_roll = false;
 	    int sprite_index = 0;
 	    
 	    std::vector<Animator::Animation*> animations;
@@ -81,30 +82,34 @@ namespace PLAYER {
 
     // TODO: find a better place to put these.
     // --- ANIMATIONS --- 
-    std::vector<int> walk_frames = { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+    std::vector<int> walk_frames = { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
+    std::vector<int> roll_frames = { 44, 45, 46, 47, 48, 49, 50, 51, 52 };
     std::vector<int> fall_frames = { 25, 26, 27, 28, 29 };
     std::vector<int> jump_frames = { 21, 22, 23, 24 };
-    std::vector<int> idle_frames = { 6, 6, 6 };
+    std::vector<int> idle_frames = { 8, 8, 8 };
 
     Player::Player(Core::Application *p_engine) {
 	Animator::Animation *IDLE;
 	Animator::Animation *WALK;
 	Animator::Animation *JUMP;
 	Animator::Animation *FALL;
+	Animator::Animation *ROLL;
 	
 	IDLE = new Animator::Animation(&idle_frames, false, 5, &sprite_index);
-	WALK = new Animator::Animation(&walk_frames, true, 1, &sprite_index);
+	WALK = new Animator::Animation(&walk_frames, true , 1, &sprite_index);
 	JUMP = new Animator::Animation(&jump_frames, false, 1, &sprite_index);
 	FALL = new Animator::Animation(&fall_frames, false, 1, &sprite_index);
+	ROLL = new Animator::Animation(&roll_frames, false, 3, &sprite_index);
 	
 	animations.push_back(IDLE);
 	animations.push_back(WALK);
 	animations.push_back(JUMP);
 	animations.push_back(FALL);
+	animations.push_back(ROLL);
 	
 	engine = p_engine;
 	
-	player = new Objects::AnimatedSprite("PlayerSprite", "../assets/player/sprite_sheet.png", 36.0f, 6.0f, 6.0f, sprite_index, true, false, engine->get_main_shader());
+	player = new Objects::AnimatedSprite("PlayerSprite", "../assets/player/sprite_sheet.png", 64.0f, 8.0f, 8.0f, sprite_index, true, false, engine->get_main_shader());
 	player_hitbox = new Objects::Rectangle("PlayerHitbox", false);
 	
 	player_hitbox->self.color = glm::vec4(255.0f, 0.0f, 0.0f, 173.5f);
@@ -130,14 +135,22 @@ namespace PLAYER {
     void Player::move(double delta) {
 	float direction = 0.0f;
 	
-	std::vector<float> left_joystick = Core::Input::get_left_axes(GLFW_JOYSTICK_1);
+	std::vector<float> left_joystick = Core::Input::get_left_axes(GOLF_MAIN_JOY);
 	
-	if (Core::Input::is_key_pressed(engine->get_window(), GOLF_D) || left_joystick[0] == 1) {
-	    player->self.rotation.y = 0.0f;
-	    direction = 1.0f;
-	} else if (Core::Input::is_key_pressed(engine->get_window(), GOLF_A) || left_joystick[0] == -1) {
-	    player->self.rotation.y = 180.0f;
-	    direction = -1.0f;
+	if (is_on_roll == false) {
+	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_LEFT_SHIFT)) {
+		animations[0]->stop();
+		animations[1]->stop();
+		is_on_roll = true;
+	    }
+	    
+	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_D) || left_joystick[0] == 1) {
+		player->self.rotation.y = 0.0f;
+		direction = 1.0f;
+	    } else if (Core::Input::is_key_pressed(engine->get_window(), GOLF_A) || left_joystick[0] == -1) {
+		player->self.rotation.y = 180.0f;
+		direction = -1.0f;
+	    }
 	}
 	
 	// TODO: this is a good start, but needs to be replaced.
@@ -145,17 +158,21 @@ namespace PLAYER {
 	FORECASTING_PLAYER.self.position = player_hitbox->self.position;
 	FORECASTING_PLAYER.self.scale = player_hitbox->self.scale;
 	float FORECASTING_VELOCITY;
-	if (direction == 1.0f || direction == -1.0f) {
-	    FORECASTING_VELOCITY = Math::lerp(velocity.x, SPEED * direction, ACCELERATION);
-	    if (is_on_floor) {
-		animations[1]->play();
-	    } else animations[1]->stop(); // walk animation
-	} else if (direction == 0.0f) {
-	    FORECASTING_VELOCITY = Math::lerp(velocity.x, 0.0f, FRICTION);
-	    if (is_on_floor) {
-		animations[0]->play();
-	    } else animations[0]->stop(); // idle animation
-	}
+	
+	if (is_on_roll == false) {
+	    if (direction == 1.0f || direction == -1.0f) {
+		FORECASTING_VELOCITY = Math::lerp(velocity.x, SPEED * direction, ACCELERATION);
+		if (is_on_floor) {
+		    animations[1]->play();
+		} else animations[1]->stop(); // walk animation
+	    }
+	    else if (direction == 0.0f) {
+		FORECASTING_VELOCITY = Math::lerp(velocity.x, 0.0f, FRICTION);
+		if (is_on_floor) {
+		    animations[0]->play();
+		} else animations[0]->stop(); // idle animation
+	    }
+	} else FORECASTING_VELOCITY = velocity.x;
 	FORECASTING_PLAYER.self.position.x += FORECASTING_VELOCITY * delta;
 	
 	bool on_collision = false;
@@ -177,6 +194,7 @@ namespace PLAYER {
 	    }
 	}
 	
+	// TODO: find a better way to manage these states;
 	if (!on_collision) {
 	    velocity.x = FORECASTING_VELOCITY;
 	    
@@ -199,8 +217,24 @@ namespace PLAYER {
     }
     
     void Player::process(double delta) {
-	
 	player->self.position = glm::vec3(player_hitbox->self.position.x - 2.5f, player_hitbox->self.position.y - 1.1f, player_hitbox->self.position.z + 0.5f);
+	
+	// TODO: find a better way to manage these states;
+	if (is_on_roll == true) {
+	    animations[2]->stop();
+	    animations[3]->stop();
+	    animations[4]->play();
+	    
+	    if (player->self.rotation.y == 180.0f) velocity.x = -35.0f;
+	    else velocity.x = 35.0f;
+	}
+	
+	if (animations[4]->played == true) {
+	    animations[4]->stop();
+	    is_on_roll = false;
+	    
+	    animations[4]->played = false;
+	}
 	
 	move(delta);
 	
@@ -227,9 +261,11 @@ namespace PLAYER {
 	    velocity.y -= GRAVITY;
 	    is_on_floor = false;
 	} else {
-	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_UP) || Core::Input::is_joystick_button_pressed(GLFW_JOYSTICK_1, GLFW_GAMEPAD_BUTTON_A)) {
+	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_UP) || Core::Input::is_joystick_button_pressed(GOLF_MAIN_JOY, GOLF_JOY_BUTTON_A)) {
 		if (is_on_floor) {
 		    velocity.y = JUMP_FORCE;
+		    animations[4]->stop();
+		    is_on_roll = false;
 		}
 	    }
 	}
