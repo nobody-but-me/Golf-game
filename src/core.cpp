@@ -74,10 +74,11 @@ namespace Core {
     }
     
     static void window_resized_callback(GLFWwindow *window, int w, int h) {
+	// glfwSetWindowAspectRatio(window, 1064, 600);
 	glfwGetFramebufferSize(window, &w, &h);
-	// glViewport(w / 2 - (1064 / 2), h / 2 - (600 / 2), 1064, 600);
-	glfwSetWindowAspectRatio(window, w, h);
-	glViewport(0.0f, 0.0f, w, h);
+	
+	glViewport(w / 2 - (1280 / 2), h / 2 - (720 / 2), 1280, 720);
+	// glViewport(0.0f, 0.0f, w, h);
 	return;
     }
     
@@ -125,7 +126,7 @@ namespace Core {
 	
 	std::cout << "[INFO] GLSL VERSION :: " << glsl_version << std::endl;
 
-	window = glfwCreateWindow(WIDTH, HEIGHT, p_title.c_str(), NULL, NULL);
+	window = glfwCreateWindow(TEST_WIDTH, TEST_HEIGHT, p_title.c_str(), NULL, NULL);
 	if (window == NULL) {
 	    std::cout << "[FAILED]: Application's window could not be created. \n" << std::endl;
 	    return;
@@ -138,9 +139,9 @@ namespace Core {
 	    return;
 	}
 	glfwSetFramebufferSizeCallback(window, window_resized_callback);
-	glfwSetWindowAspectRatio(window, WIDTH, HEIGHT);
+	// glfwSetWindowAspectRatio(window, WIDTH, HEIGHT);
 	
-	glViewport(WIDTH / 2 - (1064 / 2), HEIGHT / 2 - (600 / 2), 1064, 600);
+	glViewport(TEST_WIDTH / 2 - (WIDTH / 2), TEST_HEIGHT / 2 - (HEIGHT / 2), WIDTH, HEIGHT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -79,8 +79,11 @@ namespace Core {
     
     class Application {
 	    private:
-	        int WIDTH  = 1024;
-	        int HEIGHT = 600;
+	        int TEST_WIDTH  = 1024;
+	        int TEST_HEIGHT = 600;
+		
+	        int WIDTH  = 1280;
+	        int HEIGHT = 720;
 		
 	        bool running = false;
 	        GLFWwindow *window;
