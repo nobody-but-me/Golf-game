@@ -70,35 +70,35 @@ build cmake_object_order_depends_target_golf: phony || CMakeFiles/golf.dir
 
 build CMakeFiles/golf.dir/src/core.cpp.o: CXX_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/core.cpp || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/core.cpp.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -std=gnu++11
+  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++11
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src
 
 build CMakeFiles/golf.dir/src/game.cpp.o: CXX_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/game.cpp || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/game.cpp.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -std=gnu++11
+  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++11
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src
 
 build CMakeFiles/golf.dir/src/main.cpp.o: CXX_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/main.cpp || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/main.cpp.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -std=gnu++11
+  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++11
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src
 
 build CMakeFiles/golf.dir/src/objects.cpp.o: CXX_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/objects.cpp || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/objects.cpp.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -std=gnu++11
+  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++11
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src
 
 build CMakeFiles/golf.dir/src/glad.c.o: C_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/glad.c || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/glad.c.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable
+  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src

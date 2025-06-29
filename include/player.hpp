@@ -19,7 +19,9 @@ namespace PLAYER {
 	private:
 	    const float NORMAL_GRAVITY = 2.3f;
 	    // const float NORMAL_GRAVITY = 0.f;
-
+	    const float WALKING_SPEED = 15.0f;
+	    const float NORMAL_SPEED = 25.0f;
+	    
 	    const float ACCELERATION = 0.2;
 	    const float JUMP_FORCE = 43.0f;
 	    const float FRICTION = 0.07f;
@@ -31,6 +33,7 @@ namespace PLAYER {
 	    bool is_on_floor   = false;
 	    bool is_on_wall    = false;
 	    bool is_on_roll    = false;
+	    bool walking       = false;
 	    int sprite_index   = 0;
 	    
 	    std::vector<Animator::Animation*> animations;
@@ -83,30 +86,34 @@ namespace PLAYER {
 
     // TODO: find a better place to put these.
     // --- ANIMATIONS --- 
-    std::vector<int> walk_frames = { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
-    std::vector<int> roll_frames = { 44, 45, 46, 47, 48, 49, 50, 51, 52 };
+    std::vector<int> ruun_frames = { 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 };
+    std::vector<int> roll_frames = { 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54 };
+    std::vector<int> walk_frames = { 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 1 };
     std::vector<int> fall_frames = { 25, 26, 27, 28, 29 };
     std::vector<int> jump_frames = { 21, 22, 23, 24 };
     std::vector<int> idle_frames = { 8, 8, 8 };
 
     Player::Player(Core::Application *p_engine) {
 	Animator::Animation *IDLE;
+	Animator::Animation *RUUN;
 	Animator::Animation *WALK;
 	Animator::Animation *JUMP;
 	Animator::Animation *FALL;
 	Animator::Animation *ROLL;
 	
 	IDLE = new Animator::Animation(&idle_frames, false, 5, &sprite_index);
+	RUUN = new Animator::Animation(&ruun_frames, true , 1, &sprite_index);
 	WALK = new Animator::Animation(&walk_frames, true , 1, &sprite_index);
 	JUMP = new Animator::Animation(&jump_frames, false, 1, &sprite_index);
 	FALL = new Animator::Animation(&fall_frames, false, 1, &sprite_index);
 	ROLL = new Animator::Animation(&roll_frames, false, 3, &sprite_index);
 	
 	animations.push_back(IDLE);
-	animations.push_back(WALK);
+	animations.push_back(RUUN);
 	animations.push_back(JUMP);
 	animations.push_back(FALL);
 	animations.push_back(ROLL);
+	animations.push_back(WALK);
 	
 	engine = p_engine;
 	
@@ -199,8 +206,17 @@ namespace PLAYER {
 	// TODO: find a better way to manage these states;
 	if (is_on_roll == false) {
 	    if (is_on_floor == true) {
-		if (velocity.x >= 10.0f || velocity.x <= -10.0f) animations[1]->play();
-		else                                             animations[0]->play();
+		if (velocity.x >= 2.0f || velocity.x <= -2.0f) {
+		    if (walking == false) {
+			animations[1]->play();
+		    } else {
+			animations[5]->play();
+		    }
+		}
+		else {
+		    animations[0]->play();
+		    
+		}
 	    } else {
 		animations[0]->stop();
 		animations[1]->stop();
@@ -237,9 +253,21 @@ namespace PLAYER {
     void Player::process(double delta) {
 	player->self.position = glm::vec3(player_hitbox->self.position.x - 2.5f, player_hitbox->self.position.y - 1.1f, player_hitbox->self.position.z + 0.5f);
 	
+	// TODO: find a better way to do all of these.
 	if (is_on_roll == true) {
+	    player_hitbox->self.scale.y = 3.0f;
 	    if (player->self.rotation.y == 180.0f) velocity.x = -35.0f;
 	    else velocity.x = 35.0f;
+	} else player_hitbox->self.scale.y = 4.0f;
+	
+	if (is_on_floor == true) {
+	    if (Core::Input::is_key_pressed(engine->get_window(), GOLF_LEFT_CTRL) || Core::Input::is_joystick_button_pressed(GOLF_MAIN_JOY, GOLF_JOY_BUTTON_Y)) {
+		SPEED = WALKING_SPEED;
+		walking = true;
+	    } else {
+		SPEED = NORMAL_SPEED;
+		walking = false;
+	    }
 	}
 	
 	move(delta);
@@ -282,7 +310,9 @@ namespace PLAYER {
 	Molson(_set_int)("SPRITE_FRAMES", player->sprite_frames, true, engine->get_main_shader());
 	Molson(_set_int)("SPRITE_ROWS", player->sprite_rows, true, engine->get_main_shader());
 	Molson(_set_int)("index", sprite_index, true, engine->get_main_shader());
+	#if DEBUG_MODE == true
 	player_hitbox->render(engine->get_main_shader());
+	#endif
 	player->render(engine->get_main_shader());
 	return;
     }
