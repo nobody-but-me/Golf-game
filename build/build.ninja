@@ -12,14 +12,19 @@
 
 # =============================================================================
 # Project: golf_game
-# Configurations: 
+# Configurations: Release
 # =============================================================================
 
 #############################################
 # Minimal version of Ninja required by this file
 
-ninja_required_version = 1.5
+ninja_required_version = 1.8
 
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = Release
 # =============================================================================
 # Include auxiliary files.
 
@@ -68,37 +73,37 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 
 build cmake_object_order_depends_target_golf: phony || CMakeFiles/golf.dir
 
-build CMakeFiles/golf.dir/src/core.cpp.o: CXX_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/core.cpp || cmake_object_order_depends_target_golf
+build CMakeFiles/golf.dir/src/core.cpp.o: CXX_COMPILER__golf_Release /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/core.cpp || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/core.cpp.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++11
+  FLAGS = -O3 -DNDEBUG -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++17
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src
 
-build CMakeFiles/golf.dir/src/game.cpp.o: CXX_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/game.cpp || cmake_object_order_depends_target_golf
+build CMakeFiles/golf.dir/src/game.cpp.o: CXX_COMPILER__golf_Release /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/game.cpp || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/game.cpp.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++11
+  FLAGS = -O3 -DNDEBUG -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++17
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src
 
-build CMakeFiles/golf.dir/src/main.cpp.o: CXX_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/main.cpp || cmake_object_order_depends_target_golf
+build CMakeFiles/golf.dir/src/main.cpp.o: CXX_COMPILER__golf_Release /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/main.cpp || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/main.cpp.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++11
+  FLAGS = -O3 -DNDEBUG -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++17
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src
 
-build CMakeFiles/golf.dir/src/objects.cpp.o: CXX_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/objects.cpp || cmake_object_order_depends_target_golf
+build CMakeFiles/golf.dir/src/objects.cpp.o: CXX_COMPILER__golf_Release /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/objects.cpp || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/objects.cpp.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++11
+  FLAGS = -O3 -DNDEBUG -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false -std=gnu++17
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src
 
-build CMakeFiles/golf.dir/src/glad.c.o: C_COMPILER__golf_ /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/glad.c || cmake_object_order_depends_target_golf
+build CMakeFiles/golf.dir/src/glad.c.o: C_COMPILER__golf_Release /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/src/glad.c || cmake_object_order_depends_target_golf
   DEP_FILE = CMakeFiles/golf.dir/src/glad.c.o.d
-  FLAGS = -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false
+  FLAGS = -O3 -DNDEBUG -Wall -Werror -Wno-unused-but-set-variable -DDEBUG_MODE=false
   INCLUDES = -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib/glm -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/include -I/home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/lib
   OBJECT_DIR = CMakeFiles/golf.dir
   OBJECT_FILE_DIR = CMakeFiles/golf.dir/src
@@ -109,21 +114,22 @@ build CMakeFiles/golf.dir/src/glad.c.o: C_COMPILER__golf_ /home/dannyboy/Documen
 
 
 #############################################
-# Link the executable build/golf
+# Link the executable bin/golf
 
-build build/golf: CXX_EXECUTABLE_LINKER__golf_ CMakeFiles/golf.dir/src/core.cpp.o CMakeFiles/golf.dir/src/game.cpp.o CMakeFiles/golf.dir/src/main.cpp.o CMakeFiles/golf.dir/src/objects.cpp.o CMakeFiles/golf.dir/src/glad.c.o
-  LINK_FLAGS = -rdynamic -Wl,--copy-dt-needed-entries
+build bin/golf: CXX_EXECUTABLE_LINKER__golf_Release CMakeFiles/golf.dir/src/core.cpp.o CMakeFiles/golf.dir/src/game.cpp.o CMakeFiles/golf.dir/src/main.cpp.o CMakeFiles/golf.dir/src/objects.cpp.o CMakeFiles/golf.dir/src/glad.c.o
+  FLAGS = -O3 -DNDEBUG
+  LINK_FLAGS = -rdynamic  -Wl,--copy-dt-needed-entries
   LINK_LIBRARIES = -lglfw  -lglut
   OBJECT_DIR = CMakeFiles/golf.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = build/golf
+  TARGET_FILE = bin/golf
   TARGET_PDB = golf.dbg
 
 # =============================================================================
 # Target aliases.
 
-build golf: phony build/golf
+build golf: phony bin/golf
 
 # =============================================================================
 # Folder targets.
@@ -133,7 +139,7 @@ build golf: phony build/golf
 #############################################
 # Folder: /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/build
 
-build all: phony build/golf
+build all: phony bin/golf
 
 # =============================================================================
 # Unknown Build Time Dependencies.
@@ -145,16 +151,30 @@ build all: phony build/golf
 
 
 #############################################
+# Phony target to force glob verification run.
+
+build /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/build/CMakeFiles/VerifyGlobs.cmake_force: phony
+
+
+#############################################
+# Re-run CMake to check if globbed directories changed.
+
+build /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/build/CMakeFiles/cmake.verify_globs: VERIFY_GLOBS | /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/build/CMakeFiles/VerifyGlobs.cmake_force
+  pool = console
+  restat = 1
+
+
+#############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | ../CMakeLists.txt /usr/share/cmake-3.21/Modules/CMakeCInformation.cmake /usr/share/cmake-3.21/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.21/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.21/Modules/Platform/Linux.cmake /usr/share/cmake-3.21/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.21.4/CMakeCCompiler.cmake CMakeFiles/3.21.4/CMakeCXXCompiler.cmake CMakeFiles/3.21.4/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/build/CMakeFiles/cmake.verify_globs | ../CMakeLists.txt /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/build/CMakeFiles/VerifyGlobs.cmake /usr/share/cmake-3.21/Modules/CMakeCInformation.cmake /usr/share/cmake-3.21/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.21/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.21/Modules/Platform/Linux.cmake /usr/share/cmake-3.21/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.21.4/CMakeCCompiler.cmake CMakeFiles/3.21.4/CMakeCXXCompiler.cmake CMakeFiles/3.21.4/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build ../CMakeLists.txt /usr/share/cmake-3.21/Modules/CMakeCInformation.cmake /usr/share/cmake-3.21/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.21/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.21/Modules/Platform/Linux.cmake /usr/share/cmake-3.21/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.21.4/CMakeCCompiler.cmake CMakeFiles/3.21.4/CMakeCXXCompiler.cmake CMakeFiles/3.21.4/CMakeSystem.cmake: phony
+build ../CMakeLists.txt /home/dannyboy/Documents/_hobbies/_programming/_cpp/golf-game/build/CMakeFiles/VerifyGlobs.cmake /usr/share/cmake-3.21/Modules/CMakeCInformation.cmake /usr/share/cmake-3.21/Modules/CMakeCXXInformation.cmake /usr/share/cmake-3.21/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake-3.21/Modules/CMakeGenericSystem.cmake /usr/share/cmake-3.21/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake-3.21/Modules/CMakeLanguageInformation.cmake /usr/share/cmake-3.21/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake-3.21/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake-3.21/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU-C.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU-CXX.cmake /usr/share/cmake-3.21/Modules/Compiler/GNU.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake-3.21/Modules/Platform/Linux-GNU.cmake /usr/share/cmake-3.21/Modules/Platform/Linux.cmake /usr/share/cmake-3.21/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.21.4/CMakeCCompiler.cmake CMakeFiles/3.21.4/CMakeCXXCompiler.cmake CMakeFiles/3.21.4/CMakeSystem.cmake: phony
 
 
 #############################################

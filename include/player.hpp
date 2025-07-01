@@ -165,7 +165,7 @@ namespace PLAYER {
 	Objects::Rectangle FORECASTING_PLAYER("PlayerForecast", false);
 	FORECASTING_PLAYER.self.position = player_hitbox->self.position;
 	FORECASTING_PLAYER.self.scale = player_hitbox->self.scale;
-	float FORECASTING_VELOCITY;
+	float FORECASTING_VELOCITY = 0.0f;
 	
 	if (is_on_roll == false) {
 	    if (direction == 1.0f || direction == -1.0f) {
