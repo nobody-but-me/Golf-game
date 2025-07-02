@@ -7,21 +7,18 @@ O.k., let's try again. This game idea was born after a crazy idea I had and afte
 # How to Build
 
 ##### dependencies:
- - glfw;
+ - glfw3;
  - 
 
 ##### building:
 the basic:
 
 ``` 
-$ cd build 
+$ mkdir build && cd build 
 ```
 ``` 
-$ cmake -G Ninja .. 
+$ cmake .. -G Ninja
 ```
 ``` 
-$ ninja 
-```
-``` 
-$ ./build/golf 
+$ ninja && ./bin/golf
 ```
