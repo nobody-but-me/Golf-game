@@ -15,7 +15,7 @@ file(GLOB_RECURSE SRC_FILES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 add_executable(golf ${SRC_FILES} ${CMAKE_SOURCE_DIR}/src/glad.c)
 target_compile_options(golf PRIVATE -Wall -Werror -Wno-unused-but-set-variable)
 
-target_link_libraries(golf PRIVATE glfw glut)
+target_link_libraries(golf PRIVATE glfw)
 set_target_properties(golf PROPERTIES LINK_FLAGS "-Wl,--copy-dt-needed-entries")
 
 

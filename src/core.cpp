@@ -82,10 +82,10 @@ namespace Core {
 	return;
     }
     
-    // VIEW VARIABLES
+    // PROJECTION VARIABLES
     glm::mat4 projection = glm::mat4(1.0f);
     glm::mat4 view = glm::mat4(1.0f);
-
+    
     glm::mat4 *Application::get_view() {
 	return &view;
     }
@@ -120,12 +120,12 @@ namespace Core {
 	const char* glsl_version = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+	// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+	// glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 	#endif
 	
 	std::cout << "[INFO] GLSL VERSION :: " << glsl_version << std::endl;
-
+	
 	window = glfwCreateWindow(TEST_WIDTH, TEST_HEIGHT, p_title.c_str(), NULL, NULL);
 	if (window == NULL) {
 	    std::cout << "[FAILED]: Application's window could not be created. \n" << std::endl;

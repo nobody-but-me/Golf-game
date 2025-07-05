@@ -38,15 +38,10 @@ int main(int argc, char *argv[]) {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glDisable(GL_SCISSOR_TEST);
 	
-	// int count;
-	// const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
-	// std::cout << *axes << " :: " << count << std::endl;
-	
-	Game::process(delta);
-	
 	delta = glfwGetTime() - last_time;
 	last_time = glfwGetTime();
 	
+	Game::process(delta);
 	Game::render();
 	
 	glfwSwapBuffers(engine.get_window());
